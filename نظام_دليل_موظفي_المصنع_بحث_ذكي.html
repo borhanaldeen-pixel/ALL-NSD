@@ -1,0 +1,2155 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#0F172A">
+  <title>N.S.D | نظام إدارة الإنتاج وسحب البودرة والعطور</title>
+  
+  <!-- Tailwind CSS & Google Fonts -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --primary-main: #4285F4;
+      --primary-dark: #1967D2;
+      --primary-light: #E8F0FE;
+      --primary-glow: rgba(66, 133, 244, 0.22);
+      --bg-dark: #F8FAFC;
+      --text-dark: #0F172A;
+      --brand-crystal: #4285F4;
+      --brand-liga: #EA4335;
+      --brand-saah: #34A853;
+    }
+
+    * { 
+      box-sizing: border-box; 
+      -webkit-tap-highlight-color: transparent; 
+    }
+
+    body { 
+      font-family: 'Tajawal', sans-serif; 
+      background: linear-gradient(145deg, #F8FAFC 0%, #EEF3F8 48%, #E8F0FE 100%); 
+      color: #1E293B;
+      line-height: 1.5;
+    }
+
+    /* الكروت الزجاجية البيضاء النقية */
+    .glass-card {
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(226, 232, 240, 0.9);
+      border-radius: 28px;
+      box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.06);
+    }
+
+    /* كرت الداشبورد المطور باللون الكحلي والنيلي الفاخر */
+    .modern-dashboard-card {
+      background: linear-gradient(135deg, #174EA6 0%, #4285F4 52%, #34A853 100%);
+      border-radius: 36px;
+      box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.7);
+      position: relative;
+      overflow: hidden;
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    /* عناوين المكائن ثلاثية الأبعاد ذات الظلال الملونة المتباينة */
+    .machine-title-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.45rem 0.9rem;
+      background: linear-gradient(145deg, #F8FAFC 0%, #E2E8F0 100%);
+      border: 1.5px solid #CBD5E1;
+      border-bottom: 3.5px solid #94A3B8;
+      border-radius: 16px;
+      font-weight: 900;
+      font-size: 0.9rem;
+      color: #0F172A;
+      box-shadow: 0 6px 14px -3px rgba(37, 99, 235, 0.22), 0 2px 4px rgba(0, 0, 0, 0.05);
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .machine-title-badge:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 18px -4px rgba(37, 99, 235, 0.32);
+    }
+
+    /* بطاقات المكائن الملونة ومؤشرات الإنتاج */
+    .machine-card {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, var(--machine-tint, #FFFFFF), #FFFFFF 72%);
+      border: 1px solid var(--machine-border, #D7E3F4);
+      border-right: 6px solid var(--machine-color, #4285F4);
+      border-radius: 22px;
+      box-shadow: 0 8px 20px rgba(30, 64, 175, 0.08);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .machine-card:hover { transform: translateY(-2px); box-shadow: 0 14px 28px rgba(30, 64, 175, 0.14); }
+    .machine-card::before { content: ''; position: absolute; inset: 0 auto 0 0; width: 5px; background: var(--machine-color, #4285F4); opacity: .18; }
+    .machine-metrics { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; width: 100%; border-top: 1px solid var(--machine-border, #D7E3F4); padding-top: 10px; }
+    .machine-metric { background: rgba(255,255,255,.82); border: 1px solid rgba(148,163,184,.20); border-radius: 15px; padding: 8px 10px; text-align: center; }
+    .machine-metric-label { color: #64748B; font-size: .68rem; font-weight: 800; display: block; margin-bottom: 2px; }
+    .machine-metric-value { color: var(--machine-color, #1967D2); font-size: 1rem; font-weight: 900; direction: ltr; }
+    .machine-card-crystal { --machine-color: #4285F4; --machine-tint: #E8F0FE; --machine-border: #B8D0F8; }
+    .machine-card-liga { --machine-color: #EA4335; --machine-tint: #FCE8E6; --machine-border: #F5B7B1; }
+    .machine-card-saah { --machine-color: #34A853; --machine-tint: #E6F4EA; --machine-border: #B7DFBF; }
+    .machine-card-empty { --machine-color: #64748B; --machine-tint: #F1F5F9; --machine-border: #CBD5E1; }
+
+    /* ترويسة بطاقة المكائن الصغيرة */
+    .small-group-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.4rem 0.75rem;
+      background: linear-gradient(145deg, #EFF6FF 0%, #DBEAFE 100%);
+      border: 1.5px solid #BFDBFE;
+      border-bottom: 3px solid #3B82F6;
+      border-radius: 14px;
+      font-weight: 900;
+      color: #1E3A8A;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+    }
+
+    /* حقول الإدخال مع تأثير التحديد */
+    .input-style {
+      width: 100%; 
+      text-align: center; 
+      padding: 0.65rem 0.8rem; 
+      border-radius: 1rem;
+      border: 2px solid #E2E8F0; 
+      outline: none; 
+      font-weight: 900; 
+      font-size: 1rem;
+      background-color: #F8FAFC; 
+      color: #0F172A; 
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .input-style:focus { 
+      border-color: var(--primary-main); 
+      background-color: #EFF6FF; 
+      box-shadow: 0 0 0 4px var(--primary-glow); 
+      transform: scale(1.015); 
+    }
+
+    /* الشريط السفلي العائم */
+    .bottom-nav {
+      position: fixed; 
+      bottom: 14px; 
+      left: 50%; 
+      transform: translateX(-50%);
+      width: 95%; 
+      max-width: 640px; 
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.96); 
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border-radius: 32px; 
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.28);
+      padding: 6px 8px; 
+      display: flex; 
+      justify-content: space-between; 
+      gap: 4px;
+      border: 1px solid rgba(255, 255, 255, 0.5);
+    }
+
+    .nav-btn {
+      flex: 1; 
+      padding: 7px 2px; 
+      border-radius: 20px; 
+      font-weight: 900; 
+      font-size: 0.68rem;
+      text-align: center; 
+      color: #64748B; 
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex; 
+      flex-direction: column; 
+      align-items: center; 
+      gap: 2px;
+      cursor: pointer;
+      border: none;
+      background: transparent;
+    }
+
+    .nav-btn.active {
+      background: linear-gradient(135deg, #1E3A8A, #2563EB); 
+      color: #FFFFFF;
+      box-shadow: 0 4px 16px rgba(37, 99, 235, 0.45); 
+      transform: translateY(-2px);
+    }
+
+    .badge-perf {
+      font-weight: 900;
+      font-size: 0.75rem;
+      padding: 4px 10px;
+      border-radius: 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .stepper-btn {
+      width: 30px;
+      height: 30px;
+      background: #F1F5F9;
+      color: #1E3A8A;
+      border: 1.5px solid #E2E8F0;
+      border-radius: 10px;
+      font-weight: 900;
+      font-size: 1.1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+    .stepper-btn:hover {
+      background: #2563EB;
+      color: #fff;
+      border-color: #2563EB;
+    }
+
+    .custom-toggle {
+      position: relative;
+      width: 44px;
+      height: 24px;
+      border-radius: 999px;
+      background: #CBD5E1;
+      cursor: pointer;
+      transition: background 0.25s ease;
+      flex-shrink: 0;
+    }
+    .custom-toggle::after {
+      content: '';
+      position: absolute;
+      top: 3px; 
+      right: 3px;
+      width: 18px; 
+      height: 18px;
+      border-radius: 50%;
+      background: #fff;
+      transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+    .custom-toggle.on { 
+      background: #10B981; 
+    }
+    .custom-toggle.on::after { 
+      transform: translateX(-20px); 
+    }
+
+    /* مؤشر الحفظ التلقائي */
+    #save-status-indicator {
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fade-in { animation: fadeIn 0.25s ease-out forwards; }
+
+    @media print {
+      body { background: #fff !important; color: #000 !important; }
+      .no-print, .bottom-nav { display: none !important; }
+      .glass-card, .modern-dashboard-card { box-shadow: none !important; border: 1px solid #ccc !important; background: #fff !important; color: #000 !important; }
+    }
+
+    /* صفحة بحث كود الموظف — تصميم متناسق مع النظام */
+    .employee-search-hero { background:linear-gradient(135deg,#1e3a8a 0%,#2563eb 52%,#0284c7 100%); border-radius:30px; box-shadow:0 18px 38px rgba(30,64,175,.24); position:relative; overflow:hidden; color:#fff; }
+    .employee-search-hero::before { content:''; position:absolute; width:220px; height:220px; left:-70px; top:-90px; border-radius:50%; background:radial-gradient(circle,rgba(56,189,248,.28),transparent 70%); }
+    .employee-search-icon { width:58px; height:58px; border-radius:20px; display:flex; align-items:center; justify-content:center; font-size:1.9rem; background:rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.25); box-shadow:0 8px 20px rgba(0,0,0,.15); }
+    .employee-search-card { background:rgba(255,255,255,.98); border:1px solid #dbeafe; border-radius:26px; box-shadow:0 12px 32px rgba(30,64,175,.09); }
+    .employee-search-box { position:relative; }
+    .employee-search-box-icon { position:absolute; right:16px; top:50%; transform:translateY(-50%); font-size:1.25rem; color:#64748b; pointer-events:none; }
+    .employee-search-clear { position:absolute; left:12px; top:50%; transform:translateY(-50%); width:36px; height:36px; border:0; border-radius:50%; background:#f1f5f9; color:#64748b; cursor:pointer; font-weight:900; display:none; }
+    .employee-search-clear:hover { background:#fee2e2; color:#dc2626; }
+    .employee-search-input { width:100%; border:2px solid #dbeafe; border-radius:17px; background:#f8fafc; color:#0f172a; padding:16px 50px 16px 52px; font-family:'Tajawal',sans-serif; font-weight:800; font-size:1.05rem; outline:none; transition:.22s; }
+    .employee-search-input:focus { border-color:#4285F4; background:#fff; box-shadow:0 0 0 5px rgba(66,133,244,.13); }
+    .employee-search-result { border:1px solid #dbeafe; border-right:5px solid #4285F4; border-radius:18px; background:linear-gradient(135deg,#eff6ff,#fff 72%); padding:16px; box-shadow:0 7px 18px rgba(30,64,175,.06); cursor:pointer; transition:.2s; }
+    .employee-search-result:hover { transform:translateY(-2px); border-right-color:#0ea5e9; box-shadow:0 12px 24px rgba(30,64,175,.11); }
+    .employee-search-import { display:inline-flex; align-items:center; justify-content:center; gap:7px; border:1px solid #bfdbfe; background:#eff6ff; color:#1e40af; border-radius:12px; padding:9px 14px; font-weight:900; cursor:pointer; transition:.2s; }
+    .employee-search-import:hover { background:#dbeafe; }
+    .employee-search-muted { color:#64748b; }
+    .employee-live-suggestions { display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; }
+    .employee-suggestion { border:1px solid #bfdbfe; background:#eff6ff; color:#1e3a8a; border-radius:999px; padding:7px 11px; font-family:'Tajawal',sans-serif; font-size:.78rem; font-weight:900; cursor:pointer; transition:.18s; }
+    .employee-suggestion:hover { background:#dbeafe; transform:translateY(-1px); }
+    .employee-match-score { display:inline-flex; align-items:center; gap:4px; padding:4px 8px; border-radius:999px; background:#ecfdf5; color:#047857; font-size:.68rem; font-weight:900; }
+    .employee-code-pill { background:rgba(2,132,199,.09); border:1px solid rgba(2,132,199,.25); color:#0284c7; padding:7px 13px; border-radius:10px; font-family:monospace,sans-serif; font-size:1rem; font-weight:900; direction:ltr; }
+    .employee-result-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:9px; margin-top:12px; }
+    .employee-field { background:rgba(255,255,255,.84); border:1px solid rgba(148,163,184,.2); border-radius:13px; padding:9px 11px; }
+    .employee-field-label { color:#94a3b8; font-size:.66rem; font-weight:900; display:block; margin-bottom:2px; }
+    .employee-field-value { color:#334155; font-size:.78rem; font-weight:900; }
+    .employee-modal-overlay { position:fixed; inset:0; z-index:3000; background:rgba(15,23,42,.72); backdrop-filter:blur(8px); display:flex; align-items:center; justify-content:center; padding:14px; opacity:0; pointer-events:none; transition:.25s; }
+    .employee-modal-overlay.active { opacity:1; pointer-events:auto; }
+    .employee-modal { width:100%; max-width:650px; max-height:90vh; overflow:auto; background:linear-gradient(145deg,#1e3a8a 0%,#0c4a6e 55%,#065f46 100%); border:2px solid rgba(255,255,255,.22); border-radius:26px; padding:28px; color:#fff; box-shadow:0 25px 55px rgba(0,0,0,.5); transform:scale(.94) translateY(15px); transition:.28s cubic-bezier(.34,1.56,.64,1); position:relative; }
+    .employee-modal-overlay.active .employee-modal { transform:scale(1) translateY(0); }
+    .employee-modal-close { position:absolute; top:15px; left:15px; width:40px; height:40px; border-radius:50%; border:1px solid rgba(255,255,255,.25); background:rgba(255,255,255,.14); color:#fff; font-size:1.2rem; cursor:pointer; }
+    .employee-modal-close:hover { background:#ef4444; transform:rotate(90deg); }
+    .employee-modal-tag { display:inline-flex; gap:6px; align-items:center; padding:5px 13px; border-radius:20px; background:rgba(255,255,255,.15); border:1px solid rgba(255,255,255,.2); font-size:.8rem; font-weight:800; }
+    .employee-modal-name { font-size:1.75rem; font-weight:900; line-height:1.35; margin:13px 0 16px; }
+    .employee-modal-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    .employee-modal-box { background:rgba(255,255,255,.11); border:1px solid rgba(255,255,255,.17); border-radius:15px; padding:14px; }
+    .employee-modal-label { color:rgba(255,255,255,.72); font-size:.78rem; font-weight:700; display:block; margin-bottom:3px; }
+    .employee-modal-value { color:#fef08a; font-size:1.18rem; font-weight:900; word-break:break-word; }
+    .employee-modal-code { color:#38bdf8; font-family:monospace; font-size:1.45rem; direction:ltr; }
+    .employee-modal-full { grid-column:1/-1; }
+    .employee-modal-actions { display:flex; gap:9px; justify-content:flex-end; flex-wrap:wrap; margin-top:18px; }
+    .employee-modal-btn { background:rgba(255,255,255,.18); border:1px solid rgba(255,255,255,.3); color:#fff; padding:10px 17px; border-radius:12px; font-size:.85rem; font-weight:900; cursor:pointer; }
+    .employee-modal-btn:hover { background:#fff; color:#0f172a; }
+    @media(max-width:480px) { .bottom-nav{gap:1px;padding:5px 4px}.nav-btn{font-size:.58rem;padding:6px 1px}.nav-btn span:first-child{font-size:1.05rem}.employee-result-grid,.employee-modal-grid{grid-template-columns:1fr}.employee-modal-full{grid-column:auto}.employee-modal{padding:23px 17px}.employee-modal-name{font-size:1.4rem}.employee-search-input{font-size:.98rem} }
+  </style>
+</head>
+
+<body class="pb-28 w-full max-w-4xl mx-auto min-h-screen relative px-3 pt-3">
+
+  <!-- إشعار الحفظ التلقائي العائم -->
+  <div id="save-status-indicator" class="fixed top-3 left-4 z-50 pointer-events-none opacity-0 transition-opacity duration-300">
+    <div class="bg-slate-900/90 text-emerald-400 backdrop-blur-md px-3.5 py-1.5 rounded-full text-xs font-black flex items-center gap-1.5 shadow-xl border border-emerald-500/30">
+      <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+      <span>تم الحفظ محلياً</span>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       1. صفحة الداشبورد الرئيسية (N.S.D باللون الكحلي الصناعي الفاخر)
+  ========================================================================= -->
+  <main id="view-dashboard" class="space-y-4 animate-fade-in">
+    <div class="modern-dashboard-card p-6 md:p-8 text-center flex flex-col items-center">
+      
+      <div class="text-6xl mb-2 filter drop-shadow-md">⚙️</div>
+      <h1 class="text-4xl md:text-5xl font-black mb-1 tracking-wider leading-tight text-white">N.S.D</h1>
+      <p class="text-sky-200 text-xs md:text-sm font-bold mb-6">نظام المراقبة الصناعية وإدارة سحب البودرة والعطور اللحظي</p>
+
+      <!-- كرت الميزان العام للعطور -->
+      <div class="bg-slate-900/60 backdrop-blur-md rounded-3xl p-5 border border-sky-400/20 shadow-inner w-full max-w-lg mb-5">
+        <div class="text-sky-200/80 text-xs font-black mb-1">إجمالي انحراف العطور العام (kg)</div>
+        <div id="dash-total-variance" class="text-4xl md:text-5xl font-black tracking-tighter text-white" dir="ltr">0.00</div>
+        <div id="dash-status-badge" class="mt-3 inline-block px-5 py-1 rounded-full text-xs font-black bg-white/10 text-white border border-white/20">مضبوط ⚖️</div>
+        
+        <div class="grid grid-cols-3 gap-2 mt-4 pt-3 border-t border-white/10">
+          <div class="bg-black/30 rounded-2xl p-2 text-center border border-white/5">
+            <div class="text-[10px] text-sky-200/70 font-bold mb-0.5">ليجا</div>
+            <div id="dash-lega" class="font-black text-sm text-white" dir="ltr">0.0</div>
+          </div>
+          <div class="bg-black/30 rounded-2xl p-2 text-center border border-white/5">
+            <div class="text-[10px] text-sky-200/70 font-bold mb-0.5">كريستال</div>
+            <div id="dash-crystal" class="font-black text-sm text-white" dir="ltr">0.0</div>
+          </div>
+          <div class="bg-black/30 rounded-2xl p-2 text-center border border-white/5">
+            <div class="text-[10px] text-sky-200/70 font-bold mb-0.5">الساعة</div>
+            <div id="dash-alsaa" class="font-black text-sm text-white" dir="ltr">0.0</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ملخص مؤشرات سحب البودرة الكبرى -->
+      <div class="grid grid-cols-3 gap-2.5 w-full max-w-lg">
+        <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-3 text-center border border-white/10">
+          <span class="text-[10px] text-sky-200/80 font-bold block mb-1">سحب الوردية (12س)</span>
+          <div class="text-lg md:text-xl font-black text-white" id="dash-shift-ton">0.00 <span class="text-xs">طن</span></div>
+        </div>
+        <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-3 text-center border border-white/10">
+          <span class="text-[10px] text-sky-200/80 font-bold block mb-1">السحب اللحظي (ساعة)</span>
+          <div class="text-lg md:text-xl font-black text-cyan-300" id="dash-hour-ton">0.00 <span class="text-xs">طن/س</span></div>
+        </div>
+        <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-3 text-center border border-white/10">
+          <span class="text-[10px] text-sky-200/80 font-bold block mb-1">المكائن العاملة</span>
+          <div class="text-lg md:text-xl font-black text-emerald-300"><span id="dash-active-count">0</span> / 34</div>
+        </div>
+      </div>
+
+      <div class="text-[9px] font-bold text-sky-300/40 tracking-widest uppercase mt-6">N.S.D • INTEGRATED PRODUCTION MANAGEMENT SYSTEM</div>
+    </div>
+
+    <!-- كروت تفصيل سحب البودرة للأصناف الثلاثة -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+      <div class="glass-card p-4 border-r-4 border-blue-600">
+        <div class="flex justify-between items-center mb-1">
+          <span class="badge-perf bg-blue-50 text-blue-800">💎 صنف كرستال</span>
+          <span class="text-base font-black text-blue-600" id="dash-pct-crystal">0%</span>
+        </div>
+        <div class="text-xl font-black text-slate-800 my-1" id="dash-brand-shift-crystal">0.00 طن</div>
+        <div class="text-[11px] font-bold text-slate-400" id="dash-brand-hour-crystal">معدل: 0 كجم/ساعة | 0 مكائن</div>
+      </div>
+
+      <div class="glass-card p-4 border-r-4 border-amber-600">
+        <div class="flex justify-between items-center mb-1">
+          <span class="badge-perf bg-amber-50 text-amber-800">🔵 صنف ليجا</span>
+          <span class="text-base font-black text-amber-600" id="dash-pct-liga">0%</span>
+        </div>
+        <div class="text-xl font-black text-slate-800 my-1" id="dash-brand-shift-liga">0.00 طن</div>
+        <div class="text-[11px] font-bold text-slate-400" id="dash-brand-hour-liga">معدل: 0 كجم/ساعة | 0 مكائن</div>
+      </div>
+
+      <div class="glass-card p-4 border-r-4 border-emerald-600">
+        <div class="flex justify-between items-center mb-1">
+          <span class="badge-perf bg-emerald-50 text-emerald-800">⏱️ صنف الساعة</span>
+          <span class="text-base font-black text-emerald-600" id="dash-pct-saah">0%</span>
+        </div>
+        <div class="text-xl font-black text-slate-800 my-1" id="dash-brand-shift-saah">0.00 طن</div>
+        <div class="text-[11px] font-bold text-slate-400" id="dash-brand-hour-saah">معدل: 0 كجم/ساعة | 0 مكائن</div>
+      </div>
+    </div>
+
+    <!-- ملخص وجبات البرج السريعة -->
+    <div class="glass-card p-5">
+      <div class="flex justify-between items-center mb-3 pb-2 border-b border-slate-100">
+        <h3 class="font-black text-slate-800 text-sm flex items-center gap-1.5">
+          <span>🏭</span><span>احتياج خلط وجبات البرج (1.8 طن/وجبة)</span>
+        </h3>
+        <button onclick="switchTab('silos')" class="text-xs text-blue-700 font-black hover:underline">السيلوهات والخلط ←</button>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5" id="quick-batches-summary"></div>
+    </div>
+  </main>
+
+  <!-- =========================================================================
+       2. صفحة إستهلاك العطور وتفاصيل الخزانات والبراميل
+  ========================================================================= -->
+  <main id="view-perfumes" class="hidden space-y-4 animate-fade-in">
+    <!-- عنوان أعلى الصفحة -->
+    <div class="glass-card p-4 flex items-center justify-between border-r-4 border-purple-600 shadow-sm">
+      <div class="flex items-center gap-3">
+        <span class="bg-purple-100 text-purple-700 w-10 h-10 rounded-2xl flex items-center justify-center text-xl">⚗️</span>
+        <div>
+          <h1 class="text-lg md:text-xl font-black text-slate-800">حساب إستهلاك العطور</h1>
+          <p class="text-xs text-slate-500 font-bold">مطابقة منسوب الخزانات والبراميل وحساب الاستهلاك الفعلي مقابل القياسي</p>
+        </div>
+      </div>
+      <span class="badge-perf bg-purple-50 text-purple-800 text-xs">مراقبة الجودة والفاقد</span>
+    </div>
+
+    <!-- محدد الأقسام الخمسة للعطور -->
+    <div class="glass-card p-3 flex justify-between gap-1 overflow-x-auto no-scrollbar">
+      <button onclick="switchPerfumeTab('lega')" id="pbtn-lega" class="nav-btn flex-1 active">
+        <span class="text-lg">🔵</span><span>ليجا</span>
+      </button>
+      <button onclick="switchPerfumeTab('crystal_rose')" id="pbtn-crystal_rose" class="nav-btn flex-1">
+        <span class="text-lg text-rose-500">🌹</span><span>ورد</span>
+      </button>
+      <button onclick="switchPerfumeTab('crystal_flowers')" id="pbtn-crystal_flowers" class="nav-btn flex-1">
+        <span class="text-lg text-purple-500">🌸</span><span>زهور</span>
+      </button>
+      <button onclick="switchPerfumeTab('crystal_full')" id="pbtn-crystal_full" class="nav-btn flex-1">
+        <span class="text-lg text-emerald-500">🌿</span><span>فل</span>
+      </button>
+      <button onclick="switchPerfumeTab('alsaa')" id="pbtn-alsaa" class="nav-btn flex-1">
+        <span class="text-lg">⏰</span><span>الساعة</span>
+      </button>
+    </div>
+
+    <!-- حاوية واجهة قسم العطر المختار -->
+    <div id="perfume-view-container" class="space-y-4"></div>
+  </main>
+
+  <!-- =========================================================================
+       3. صفحة مكائن التعبئة (مع Dashboard خاص ومظهر ثلاثي الأبعاد)
+  ========================================================================= -->
+  <main id="view-packing" class="hidden space-y-4 animate-fade-in">
+    
+    <!-- DASHBOARD خاص بصفحة مكائن التعبئة -->
+    <div class="modern-dashboard-card p-5 md:p-6 text-white shadow-xl relative overflow-hidden">
+      <!-- خلفية هندسية ثلاثية الأبعاد -->
+      <div class="absolute -left-6 -bottom-6 text-8xl opacity-10 pointer-events-none select-none">📦</div>
+      
+      <div class="flex flex-wrap justify-between items-center gap-3 mb-4 pb-3 border-b border-white/15">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-2xl bg-blue-500/20 border border-blue-400/30 flex items-center justify-center text-xl shadow-inner">
+            ⚙️
+          </div>
+          <div>
+            <h1 class="text-lg md:text-xl font-black tracking-wide text-white">حساب القدرات الإنتاجية (مكائن التعبيه)</h1>
+            <p class="text-xs text-sky-200 font-bold">لوحة القيادة المباشرة لمعدلات سحب البودرة ومراقبة تشغيل المكائن</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="px-3.5 py-1 rounded-full text-xs font-black bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 flex items-center gap-1.5 shadow-sm">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+            مراقبة حية
+          </span>
+        </div>
+      </div>
+
+      <!-- مؤشرات الداشبورد الكبرى لصفحة التعبئة -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-2.5 text-center">
+        <!-- المكائن العاملة -->
+        <div class="bg-white/10 backdrop-blur-sm p-3 rounded-2xl border border-white/10">
+          <div class="text-[11px] text-sky-200 font-bold mb-1">المكائن العاملة</div>
+          <div class="text-2xl font-black text-emerald-300"><span id="pack-dash-active">0</span> <span class="text-xs text-white/70">/ 34</span></div>
+          <div class="text-[10px] text-white/60 font-bold mt-0.5" id="pack-dash-active-pct">نسبة التشغيل: 0%</div>
+        </div>
+        <!-- السحب اللحظي -->
+        <div class="bg-white/10 backdrop-blur-sm p-3 rounded-2xl border border-white/10">
+          <div class="text-[11px] text-sky-200 font-bold mb-1">السحب اللحظي (ساعة)</div>
+          <div class="text-2xl font-black text-cyan-300" id="pack-dash-hour">0.00 <span class="text-xs">طن/س</span></div>
+          <div class="text-[10px] text-white/60 font-bold mt-0.5" id="pack-dash-kghour">0 كجم/ساعة</div>
+        </div>
+        <!-- سحب الوردية -->
+        <div class="bg-white/10 backdrop-blur-sm p-3 rounded-2xl border border-white/10">
+          <div class="text-[11px] text-sky-200 font-bold mb-1">سحب الوردية (12س)</div>
+          <div class="text-2xl font-black text-amber-300" id="pack-dash-shift">0.00 <span class="text-xs">طن</span></div>
+          <div class="text-[10px] text-white/60 font-bold mt-0.5">الإنتاج المطلوب</div>
+        </div>
+        <!-- سحب اليوم -->
+        <div class="bg-white/10 backdrop-blur-sm p-3 rounded-2xl border border-white/10">
+          <div class="text-[11px] text-sky-200 font-bold mb-1">سحب اليوم (24س)</div>
+          <div class="text-2xl font-black text-purple-200" id="pack-dash-day">0.00 <span class="text-xs">طن</span></div>
+          <div class="text-[10px] text-white/60 font-bold mt-0.5">معدل يومي كامل</div>
+        </div>
+      </div>
+
+      <!-- بطاقات الأصناف السريعة داخل داشبورد التعبئة -->
+      <div class="grid grid-cols-3 gap-2 mt-3 pt-3 border-t border-white/10 text-center">
+        <div class="bg-blue-900/40 rounded-xl p-2 border border-blue-400/20">
+          <div class="text-[11px] font-black text-blue-200">💎 كرستال</div>
+          <div class="font-black text-sm text-white" id="pack-dash-crystal">0.00 طن</div>
+          <div class="text-[9px] text-blue-300/80 font-bold" id="pack-dash-crystal-mc">0 مكائن</div>
+        </div>
+        <div class="bg-amber-900/40 rounded-xl p-2 border border-amber-400/20">
+          <div class="text-[11px] font-black text-amber-200">🔵 ليجا</div>
+          <div class="font-black text-sm text-white" id="pack-dash-liga">0.00 طن</div>
+          <div class="text-[9px] text-amber-300/80 font-bold" id="pack-dash-liga-mc">0 مكائن</div>
+        </div>
+        <div class="bg-emerald-900/40 rounded-xl p-2 border border-emerald-400/20">
+          <div class="text-[11px] font-black text-emerald-200">⏱️ الساعة</div>
+          <div class="font-black text-sm text-white" id="pack-dash-saah">0.00 طن</div>
+          <div class="text-[9px] text-emerald-300/80 font-bold" id="pack-dash-saah-mc">0 مكائن</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- مكائن العبوات المتوسطة والكبيرة -->
+    <div class="glass-card p-5">
+      <div class="flex items-center gap-2 mb-4 border-b pb-3">
+        <span class="bg-gradient-to-r from-blue-700 to-indigo-700 text-white w-8 h-8 rounded-xl flex justify-center items-center font-black shadow-md">⚙️</span>
+        <div>
+          <h2 class="text-base font-black text-slate-800">مكائن العبوات الكبيرة والمتوسطة ومكينة التعبئة اليدوي</h2>
+          <p class="text-xs text-slate-400 font-bold">تحديد الصنف، الوزن، وحالة التشغيل</p>
+        </div>
+      </div>
+      <div class="space-y-3.5" id="main-machines-container"></div>
+    </div>
+
+    <!-- مكائن العبوات الصغيرة (28 مكينة) -->
+    <div class="glass-card p-5">
+      <div class="flex flex-wrap justify-between items-center gap-2 mb-4 border-b pb-3">
+        <div class="flex items-center gap-2">
+          <span class="bg-gradient-to-r from-blue-700 to-indigo-700 text-white w-8 h-8 rounded-xl flex justify-center items-center font-black shadow-md">📦</span>
+          <div>
+            <h2 class="text-base font-black text-slate-800">مكائن العبوات الصغيرة (7 مجموعات × 4 مكائن = 28 مكينة)</h2>
+            <p class="text-xs text-slate-400 font-bold">السرعة القياسية لجميع المكائن الصغيرة: 48 عبوة/د</p>
+          </div>
+        </div>
+        <div class="flex gap-2">
+          <button onclick="setAllSmallCounts(4)" class="px-3 py-1.5 rounded-xl text-xs font-black bg-blue-700 text-white hover:bg-blue-800 shadow transition">تشغيل الكل (28)</button>
+          <button onclick="setAllSmallCounts(0)" class="px-3 py-1.5 rounded-xl text-xs font-black bg-slate-200 text-slate-700 hover:bg-slate-300 transition">إيقاف الكل</button>
+        </div>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5" id="small-machines-container"></div>
+    </div>
+  </main>
+
+  <!-- =========================================================================
+       4. صفحة سيلوهات البودرة وخطة وجبات البرج
+  ========================================================================= -->
+  <main id="view-silos" class="hidden space-y-4 animate-fade-in">
+    <!-- عنوان وشرح الغرض من الصفحة -->
+    <div class="glass-card p-5 border-r-4 border-emerald-600 shadow-sm">
+      <div class="flex items-start gap-3">
+        <span class="bg-emerald-100 text-emerald-800 w-12 h-12 rounded-2xl flex items-center justify-center text-2xl flex-shrink-0 mt-0.5">🏢</span>
+        <div>
+          <h1 class="text-lg md:text-xl font-black text-slate-800 mb-1">سيلوهات البودرة الجاهزة وخطة تشغيل البرج</h1>
+          <p class="text-xs md:text-sm text-slate-600 leading-relaxed font-bold">
+            <strong class="text-emerald-700">الغرض من الصفحة:</strong> 
+            متابعة وجدولة أرصدة سيلوهات تخزين البودرة الجاهزة (A, B, C, A1) في بداية الوردية، ومقارنتها تلقائياً بمعدلات استهلاك وسحب مكائن التعبئة، وذلك لحساب صافي العجز الفعلي واحتساب عدد خلطات ووجبات برج التجفيف المطلوبة بدقة (بمعدل 1.8 طن للوجبة) لضمان استمرارية خطوط التعبئة دون توقف.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- السيلوهات -->
+    <div class="glass-card p-5">
+      <div class="flex flex-wrap justify-between items-center gap-2 mb-4 border-b pb-3">
+        <div class="flex items-center gap-2">
+          <span class="bg-gradient-to-r from-emerald-600 to-teal-700 text-white w-8 h-8 rounded-xl flex justify-center items-center font-black">🏢</span>
+          <div>
+            <h2 class="text-base font-black text-slate-800">مخزون بداية الوردية في سيلوهات البودرة الجاهزة (Silos)</h2>
+            <p class="text-xs text-slate-400 font-bold">حدد الصنف المخزن وأدخل رصيد أول الوردية بالطن</p>
+          </div>
+        </div>
+        <div class="bg-emerald-50 text-emerald-900 border border-emerald-200 px-4 py-1.5 rounded-2xl font-black text-xs">
+          إجمالي رصيد السيلوهات: <span id="total-silos-stock" class="text-emerald-700 text-sm">0.00</span> طن
+        </div>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3" id="silos-cards-container"></div>
+    </div>
+
+    <!-- وجبات البرج -->
+    <div class="glass-card p-5">
+      <div class="flex items-center gap-2 mb-4 border-b pb-3">
+        <span class="bg-gradient-to-r from-emerald-600 to-teal-700 text-white w-8 h-8 rounded-xl flex justify-center items-center font-black">⚡</span>
+        <div>
+          <h2 class="text-base font-black text-slate-800">خطة إنتاج البرج: عدد الوجبات المطلوبة (1.8 طن/وجبة)</h2>
+          <p class="text-xs text-slate-400 font-bold">العجز المطلوب = سحب الوردية (12س) - رصيد السيلو بداية الوردية</p>
+        </div>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-3" id="tower-batches-cards"></div>
+    </div>
+  </main>
+
+  <!-- =========================================================================
+       5. صفحة الخطة الأسبوعية
+  ========================================================================= -->
+  <main id="view-weekly" class="hidden space-y-4 animate-fade-in">
+    <!-- هيدر الخطة الأسبوعية -->
+    <div class="modern-dashboard-card p-6 rounded-3xl text-white">
+      <div class="flex justify-between items-center mb-4 pb-3 border-b border-white/20">
+        <div>
+          <h2 class="text-xl font-black">الخطة الأسبوعية للإنتاج</h2>
+          <p class="text-sky-200 text-xs font-bold">حدد الأصناف العاملة وكميات الخطة والمنتج بالعبوات</p>
+        </div>
+        <div class="bg-white/20 px-4 py-1.5 rounded-full text-xs font-black">
+          نسبة الإنجاز: <span id="week-total-pct" class="text-emerald-300">0%</span>
+        </div>
+      </div>
+      <div class="grid grid-cols-3 gap-2 text-center">
+        <div class="bg-white/10 p-3 rounded-2xl border border-white/10">
+          <div class="text-[10px] text-sky-200 font-bold">إجمالي الخطة</div>
+          <div class="text-xl font-black" id="week-total-plan">0.00 طن</div>
+        </div>
+        <div class="bg-white/10 p-3 rounded-2xl border border-white/10">
+          <div class="text-[10px] text-sky-200 font-bold">الكمية المنتجة</div>
+          <div class="text-xl font-black text-emerald-300" id="week-total-produced">0.00 طن</div>
+        </div>
+        <div class="bg-white/10 p-3 rounded-2xl border border-white/10">
+          <div class="text-[10px] text-sky-200 font-bold">المتبقي</div>
+          <div class="text-xl font-black text-rose-300" id="week-total-remaining">0.00 طن</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- كروت ملخص الأصناف الثلاثة -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-3" id="week-brand-summary-container"></div>
+
+    <!-- محدد الصنف والشرائح -->
+    <div class="glass-card p-5">
+      <h3 class="font-black text-sm text-slate-800 mb-3">اختر الصنف لعرض وتحديد أحجامه</h3>
+      <div class="flex gap-2" id="week-icon-tabs-container"></div>
+      <div class="flex flex-wrap gap-2 mt-3" id="week-flavor-chips-container"></div>
+    </div>
+
+    <!-- قائمة أحجام الصنف -->
+    <div class="glass-card p-5">
+      <div class="flex justify-between items-center mb-3 pb-2 border-b border-slate-100">
+        <h3 class="font-black text-slate-800 text-sm">أحجام الأصناف — فعّل الحجم لإدخال كمياته</h3>
+        <span class="text-xs text-slate-400 font-bold" id="week-items-count">0 صنف نشط</span>
+      </div>
+      <div class="space-y-3" id="week-items-container"></div>
+    </div>
+  </main>
+
+  <!-- =========================================================================
+       6. صفحة التقرير والجدول الشامل
+  ========================================================================= -->
+  <main id="view-table" class="hidden space-y-4 animate-fade-in">
+    <div class="glass-card p-5">
+      <div class="flex justify-between items-center mb-4 pb-2 border-b">
+        <h2 class="text-base font-black text-slate-800 flex items-center gap-2">
+          <span>📋</span><span>البيان التفصيلي الشامل لكافة خطوط ومكائن التعبئة</span>
+        </h2>
+        <button onclick="window.print()" class="px-4 py-1.5 rounded-xl text-xs font-black bg-blue-700 text-white shadow-md hover:bg-blue-800 transition">
+          طباعة التقرير
+        </button>
+      </div>
+      <div class="overflow-x-auto rounded-2xl border border-slate-200">
+        <table class="w-full text-right text-xs md:text-sm">
+          <thead class="bg-slate-900 text-white">
+            <tr>
+              <th class="p-3 font-black">المجموعة / المكينة</th>
+              <th class="p-3 font-black">الصنف</th>
+              <th class="p-3 font-black">حجم العبوة</th>
+              <th class="p-3 font-black">المكائن العاملة</th>
+              <th class="p-3 font-black">السرعة</th>
+              <th class="p-3 font-black">السحب / ساعة</th>
+              <th class="p-3 font-black">سحب الوردية (12س)</th>
+              <th class="p-3 font-black">سحب اليوم (24س)</th>
+            </tr>
+          </thead>
+          <tbody id="summary-table-body" class="divide-y divide-slate-200 bg-white font-bold"></tbody>
+          <tfoot class="bg-slate-900 text-white font-black">
+            <tr>
+              <td colspan="3" class="p-3 font-black text-sm">الإجمالي العام:</td>
+              <td id="tfoot-active-count" class="p-3 text-cyan-400 font-black">0 مكينة</td>
+              <td class="p-3">-</td>
+              <td id="tfoot-hour" class="p-3 text-amber-300 font-black">0 طن</td>
+              <td id="tfoot-shift" class="p-3 text-orange-400 font-black">0 طن</td>
+              <td id="tfoot-day" class="p-3 text-emerald-400 font-black">0 طن</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+  </main>
+
+
+  <!-- صفحة بحث كود الموظف -->
+  <main id="view-employee-search" class="hidden space-y-4 animate-fade-in">
+    <section class="employee-search-hero p-5 md:p-7">
+      <div class="relative flex items-center gap-4">
+        <div class="employee-search-icon">🔎</div>
+        <div>
+          <h1 class="text-2xl md:text-3xl font-black">بحث كود الموظف</h1>
+          <p class="text-sky-100 text-sm font-bold mt-1">ابحث بسرعة عن الموظف باستخدام الكود أو الاسم أو الوظيفة أو منطقة السكن</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="employee-search-card p-4 md:p-6 space-y-4">
+      <div class="employee-search-box">
+        <span class="employee-search-box-icon">🔍</span>
+        <input id="employee-search-input" class="employee-search-input" type="search" autocomplete="off" placeholder="اكتب كود الموظف أو الاسم أو السكن… مثال: 3340 / برهان / حذران" aria-label="البحث باسم أو كود الموظف">
+        <button id="employee-search-clear" class="employee-search-clear" type="button" title="مسح البحث">✕</button>
+        <div id="employee-live-suggestions" class="employee-live-suggestions" aria-label="اقتراحات البحث"></div>
+      </div>
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <div class="text-xs font-bold employee-search-muted">السجلات: <span id="employee-search-count" class="text-blue-700">0</span> • اكتب كلمة البحث لعرض النتائج</div>
+        <button id="employee-clear-search" type="button" class="px-4 py-2 rounded-xl text-xs font-black bg-slate-100 text-slate-700 hover:bg-slate-200">مسح البحث</button>
+      </div>
+      <div class="employee-search-import bg-emerald-50 text-emerald-700 border-emerald-200 cursor-default">⚡ قاعدة بيانات الموظفين مدمجة داخل النظام</div>
+      <p id="employee-data-note" class="text-xs text-slate-500 leading-relaxed">بيانات الموظفين مدمجة داخل النظام — لا يحتاج البحث إلى تحميل أي ملف.</p>
+    </section>
+
+    <section id="employee-search-results" class="space-y-2" aria-live="polite">
+      <div class="glass-card p-6 text-center text-sm font-bold text-slate-500">ابدأ بكتابة كود أو اسم الموظف — البيانات مدمجة داخل النظام وجاهزة تلقائياً.</div>
+    </section>
+  </main>
+
+  <!-- نافذة تفاصيل الموظف -->
+  <div id="employee-detail-modal" class="employee-modal-overlay" onclick="closeEmployeeModalOnOverlay(event)">
+    <div class="employee-modal">
+      <button class="employee-modal-close" type="button" onclick="closeEmployeeModal()">✕</button>
+      <div class="employee-modal-tag">🏭 <span id="employee-modal-plant">مصنع إنتاج وتحضير البودرة</span></div>
+      <div id="employee-modal-name" class="employee-modal-name">بيانات الموظف</div>
+      <div class="employee-modal-grid">
+        <div class="employee-modal-box"><span class="employee-modal-label">💳 كود الموظف (SAP)</span><div id="employee-modal-code" class="employee-modal-value employee-modal-code">—</div></div>
+        <div class="employee-modal-box"><span class="employee-modal-label">💼 المسمى الوظيفي</span><div id="employee-modal-job" class="employee-modal-value">—</div></div>
+        <div class="employee-modal-box employee-modal-full"><span class="employee-modal-label">📍 منطقة السكن والإقامة</span><div id="employee-modal-housing" class="employee-modal-value">—</div></div>
+        <div class="employee-modal-box employee-modal-full"><span class="employee-modal-label">🏢 الإدارة / الوحدة التنظيمية</span><div id="employee-modal-dept" class="employee-modal-value" style="font-size:1rem;color:#fff">—</div></div>
+        <div class="employee-modal-box"><span class="employee-modal-label">🕐 نظام الدوام</span><div id="employee-modal-schedule" class="employee-modal-value" style="font-size:1rem">—</div></div>
+        <div class="employee-modal-box"><span class="employee-modal-label">🔄 الوردية</span><div id="employee-modal-shift" class="employee-modal-value" style="font-size:1rem">—</div></div>
+      </div>
+      <div class="employee-modal-actions">
+        <button class="employee-modal-btn" onclick="copyEmployeeModalCode()">📋 نسخ الكود</button>
+        <button class="employee-modal-btn" onclick="copyEmployeeModalData()">📄 نسخ كل البيانات</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       شريط التنقل السفلي العائم (محدث التسميات)
+  ========================================================================= -->
+  <nav class="bottom-nav no-print">
+    <button onclick="switchTab('dashboard')" id="tab-dashboard" class="nav-btn active">
+      <span class="text-xl">🎛️</span><span>الملخص</span>
+    </button>
+    <button onclick="switchTab('perfumes')" id="tab-perfumes" class="nav-btn">
+      <span class="text-xl">⚗️</span><span>إستهلاك العطور</span>
+    </button>
+    <button onclick="switchTab('packing')" id="tab-packing" class="nav-btn">
+      <span class="text-xl">⚙️</span><span>مكائن التعبئة</span>
+    </button>
+    <button onclick="switchTab('silos')" id="tab-silos" class="nav-btn">
+      <span class="text-xl">🏢</span><span>سيلوهات البودرة</span>
+    </button>
+    <button onclick="switchTab('weekly')" id="tab-weekly" class="nav-btn">
+      <span class="text-xl">🗓️</span><span>الخطة</span>
+    </button>
+    <button onclick="switchTab('table')" id="tab-table" class="nav-btn">
+      <span class="text-xl">📋</span><span>التقرير</span>
+    </button>
+    <button onclick="switchTab('employee-search')" id="tab-employee-search" class="nav-btn">
+      <span class="text-xl">🪪</span><span>بحث كود الموظف</span>
+    </button>
+  </nav>
+
+  <!-- =========================================================================
+       المنطق البرمجي الموحد والشامل مع الحفظ التلقائي والتحديد التلقائي
+  ========================================================================= -->
+  <script>
+    // مفتاح الحفظ المحلي
+    const STORAGE_KEY = 'NSD_FACTORY_APP_DATA_V2';
+
+    // ---------------------------------------------------------
+    // 1. الثوابت وإعدادات المنتجات والبرج والسيلوهات
+    // ---------------------------------------------------------
+    const BATCH_SIZE = 1.8;
+    const BRANDS = {
+      crystal: { name: 'كرستال', emoji: '💎', color: '#2563EB' },
+      liga: { name: 'ليجا', emoji: '🔵', color: '#D97706' },
+      saah: { name: 'الساعة', emoji: '⏰', color: '#059669' },
+      empty: { name: 'فارغ', emoji: '⚪', color: '#64748B' }
+    };
+
+    let silosData = [
+      { id: 'siloA',  name: 'سيلو A',  brand: 'crystal', stock: 15.0 },
+      { id: 'siloB',  name: 'سيلو B',  brand: 'liga',    stock: 10.0 },
+      { id: 'siloC',  name: 'سيلو C',  brand: 'saah',    stock: 8.0 },
+      { id: 'siloA1', name: 'سيلو A1', brand: 'crystal', stock: 12.0 }
+    ];
+
+    let mainMachines = {
+      tiger1: { name: 'مكينة النمر رقم (1)', active: true, sku: 0.400, speed: 40, brand: 'crystal', domId: 'tiger-1', isManual: false },
+      tiger2: { name: 'مكينة النمر رقم (2)', active: true, sku: 0.400, speed: 40, brand: 'crystal', domId: 'tiger-2', isManual: false },
+      new1:   { name: 'مكينة 400 جم (المصنع الجديد)', active: true, sku: 0.400, speed: 44, brand: 'crystal', domId: 'new-1', isManual: false },
+      heavy1: { name: 'مكينة 2.5 كجم رقم (1)', active: true, sku: 1.800, speed: 12, brand: 'crystal', domId: 'heavy-1', isManual: false },
+      heavy2: { name: 'مكينة 2.5 كجم رقم (2) - المصنع الجديد', active: true, sku: 1.800, speed: 12, brand: 'crystal', domId: 'heavy-2', isManual: false },
+      manual1:{ name: 'مكينة تعبئة يدوي', active: true, sku: 10.000, speed: 100/60, brand: 'liga', domId: 'manual-1', isManual: true, shiftPackages: 1200 }
+    };
+
+    let smallGroups = [
+      { id: 'hamak1', name: 'هامك 1', count: 4, brand: 'crystal', sku: 0.100, speed: 48, isNew: false },
+      { id: 'hamak2', name: 'هامك 2', count: 4, brand: 'crystal', sku: 0.100, speed: 48, isNew: false },
+      { id: 'hamak3', name: 'هامك 3', count: 4, brand: 'crystal', sku: 0.100, speed: 48, isNew: false },
+      { id: 'wolf1',  name: 'ولف 1',  count: 4, brand: 'crystal', sku: 0.100, speed: 48, isNew: false },
+      { id: 'wolf2',  name: 'ولف 2',  count: 4, brand: 'crystal', sku: 0.100, speed: 48, isNew: false },
+      { id: 'wolf3',  name: 'ولف 3',  count: 4, brand: 'crystal', sku: 0.100, speed: 48, isNew: false },
+      { id: 'wolf4',  name: 'ولف 4 - المصنع الجديد', count: 4, brand: 'crystal', sku: 0.100, speed: 48, isNew: true }
+    ];
+
+    const smallSkuOptions = [
+      { val: 0.100, label: '100 جرام' },
+      { val: 0.140, label: '140 جرام' },
+      { val: 0.090, label: '90 جرام' },
+      { val: 0.060, label: '60 جرام' }
+    ];
+
+    // ---------------------------------------------------------
+    // 2. إعدادات العطور
+    // ---------------------------------------------------------
+    const perfumeConfigs = {
+      lega: {
+        catId: 'lega', title: 'ليجا | Lega', subTitle: 'عطر Clean Bright', ratio: 0.0012, maxCm: 80,
+        colorClass: 'text-sky-700', bgColor: 'from-blue-900 to-sky-600', borderClass: 'border-sky-500', emoji: '🔵',
+        items: [
+          { id: 'l1', name: 'ليجا 25 kg', weight: 25 },
+          { id: 'l2', name: 'ليجا 10 kg', weight: 10 },
+          { id: 'l3', name: 'ليجا 4×2.3 kg', weight: 9.2 },
+          { id: 'l4', name: 'ليجا 4×1.8 kg', weight: 7.2 },
+          { id: 'l5', name: 'ليجا 48×100 جم', weight: 4.8 },
+          { id: 'l6', name: 'ليجا 12×700 جم', weight: 8.4 },
+          { id: 'l7', name: 'ليجا 12×500 جم', weight: 6.0 }
+        ]
+      },
+      crystal_rose: {
+        catId: 'crystal_rose', title: 'كريستال ورد', subTitle: 'عطر Rose', ratio: 0.0030, maxCm: 80,
+        colorClass: 'text-red-700', bgColor: 'from-red-900 to-rose-600', borderClass: 'border-red-500', emoji: '🌹',
+        items: [
+          { id: 'cr1', name: 'كريستال ورد 4×2.3 kg', weight: 9.2 },
+          { id: 'cr2', name: 'كريستال ورد 48×100 جم', weight: 4.8 },
+          { id: 'cr3', name: 'كريستال ورد 100×48 جم + 4 عبوات', weight: 4.992 },
+          { id: 'cr4', name: 'كريستال ورد 48×60 جم', weight: 2.88 },
+          { id: 'cr5', name: 'كريستال ورد 30×140 جم', weight: 4.2 },
+          { id: 'cr6', name: 'كريستال ورد 12×400 جم', weight: 4.8 },
+          { id: 'cr7', name: 'كريستال ورد 12×400 جم + 15%', weight: 5.52 },
+          { id: 'cr8', name: 'كريستال ورد 4×2.3 كجم + 200جم', weight: 10.0 },
+          { id: 'cr9', name: 'كريستال ورد 4×1.8 كجم', weight: 7.2 }
+        ]
+      },
+      crystal_flowers: {
+        catId: 'crystal_flowers', title: 'كريستال زهور', subTitle: 'عطر Flowers', ratio: 0.0030, maxCm: 80,
+        colorClass: 'text-purple-700', bgColor: 'from-purple-900 to-indigo-600', borderClass: 'border-purple-500', emoji: '🌸',
+        items: [
+          { id: 'cf1', name: 'كريستال زهور 4×2.3 kg', weight: 9.2 },
+          { id: 'cf2', name: 'كريستال زهور 48×100 جم', weight: 4.8 },
+          { id: 'cf3', name: 'كريستال زهور 100×48 جم + 4 عبوات', weight: 4.992 },
+          { id: 'cf4', name: 'كريستال زهور 48×60 جم', weight: 2.88 },
+          { id: 'cf5', name: 'كريستال زهور 30×140 جم', weight: 4.2 },
+          { id: 'cf6', name: 'كريستال زهور 12×400 جم', weight: 4.8 },
+          { id: 'cf7', name: 'كريستال زهور 12×400 جم + 15%', weight: 5.52 },
+          { id: 'cf8', name: 'كريستال زهور 4×2.3 كجم + 200جم', weight: 10.0 },
+          { id: 'cf9', name: 'كريستال زهور 4×1.8 كجم', weight: 7.2 }
+        ]
+      },
+      crystal_full: {
+        catId: 'crystal_full', title: 'كريستال فل', subTitle: 'عطر Full', ratio: 0.0035, maxCm: 80,
+        colorClass: 'text-green-700', bgColor: 'from-green-900 to-emerald-600', borderClass: 'border-green-500', emoji: '🌿',
+        items: [
+          { id: 'cfu1', name: 'كريستال فل 4×2.3 kg', weight: 9.2 },
+          { id: 'cfu2', name: 'كريستال فل 48×100 جم', weight: 4.8 },
+          { id: 'cfu3', name: 'كريستال فل 100×48 جم + 4 عبوات', weight: 4.992 },
+          { id: 'cfu4', name: 'كريستال فل 48×60 جم', weight: 2.88 },
+          { id: 'cfu5', name: 'كريستال فل 30×140 جم', weight: 4.2 },
+          { id: 'cfu6', name: 'كريستال فل 12×400 جم', weight: 4.8 },
+          { id: 'cfu7', name: 'كريستال فل 12×400 جم + 15%', weight: 5.52 },
+          { id: 'cfu8', name: 'كريستال فل 4×2.3 كجم + 200جم', weight: 10.0 },
+          { id: 'cfu9', name: 'كريستال فل 4×1.8 كجم', weight: 7.2 }
+        ]
+      },
+      alsaa: {
+        catId: 'alsaa', title: 'الساعة', subTitle: 'عطر الساعة الأصلي', ratio: 0.0010, maxCm: 40,
+        colorClass: 'text-amber-700', bgColor: 'from-amber-900 to-orange-600', borderClass: 'border-amber-500', emoji: '⏰',
+        items: [
+          { id: 'a1', name: 'الساعة 6×2 kg', weight: 12.0 },
+          { id: 'a2', name: 'الساعة 48×90 g', weight: 4.32 }
+        ]
+      }
+    };
+
+    const tanksInfo = {
+      'A': { name: 'عطارة A', f: 3.8, offset: 35, direct: false },
+      'C': { name: 'عطارة C', f: 3.5, offset: 45, direct: false },
+      'D': { name: 'عطارة D', f: 4.5, offset: 22, direct: false },
+      'E': { name: 'عطارة E', f: 1.35, offset: 30, direct: false },
+      'F': { name: 'الجديد F', f: 3.5, offset: 0, direct: true }
+    };
+
+    let perfumeState = {
+      currentCat: 'lega',
+      data: {
+        lega: { tanks: [], b_start_c: '', b_start_o: '', b_end_c: '', b_end_o: '', prod: {} },
+        crystal_rose: { tanks: [], b_start_c: '', b_start_o: '', b_end_c: '', b_end_o: '', prod: {} },
+        crystal_flowers: { tanks: [], b_start_c: '', b_start_o: '', b_end_c: '', b_end_o: '', prod: {} },
+        crystal_full: { tanks: [], b_start_c: '', b_start_o: '', b_end_c: '', b_end_o: '', prod: {} },
+        alsaa: { tanks: [], b_start_c: '', b_start_o: '', b_end_c: '', b_end_o: '', prod: {} }
+      }
+    };
+
+    // ---------------------------------------------------------
+    // 3. بيانات الخطة الأسبوعية
+    // ---------------------------------------------------------
+    const weekCrystalSizes = [
+      { key: 's1', label: '48 × 100 جم', kg: 4.8 },
+      { key: 's2', label: '100 × 48 جم + 4 عبوات', kg: 4.992 },
+      { key: 's3', label: '48 × 60 جم', kg: 2.88 },
+      { key: 's4', label: '30 × 140 جم', kg: 4.2 },
+      { key: 's5', label: '12 × 400 جم', kg: 4.8 },
+      { key: 's6', label: '12 × 400 جم + 15%', kg: 5.52 },
+      { key: 's7', label: '4 × 2.3 كجم', kg: 9.2 },
+      { key: 's8', label: '4 × 2.3 كجم + 200جم', kg: 10.0 },
+      { key: 's9', label: '4 × 1.8 كجم', kg: 7.2 }
+    ];
+
+    const weekCrystalFlavors = [
+      { key: 'rose', name: 'ورد', color: '#EC4899', perfKey: 'crystal_rose' },
+      { key: 'flowers', name: 'زهور', color: '#8B5CF6', perfKey: 'crystal_flowers' },
+      { key: 'full', name: 'فل', color: '#14B8A6', perfKey: 'crystal_full' }
+    ];
+
+    const weekLigaSizes = [
+      { key: 'l5', label: '48 × 100 جم', kg: 4.8 },
+      { key: 'l6', label: '12 × 700 جم', kg: 8.4 },
+      { key: 'l7', label: '12 × 500 جم', kg: 6.0 },
+      { key: 'l3', label: '4 × 2.3 كجم', kg: 9.2 },
+      { key: 'l4', label: '4 × 1.8 كجم', kg: 7.2 },
+      { key: 'l2', label: 'مسحوق الغسيل 10 كجم', kg: 10.0 },
+      { key: 'l1', label: 'مسحوق الغسيل 25 كجم', kg: 25.0 }
+    ];
+
+    const weekSaahSizes = [
+      { key: 'a2', label: '48 × 90 جم', kg: 4.32 },
+      { key: 'a1', label: '6 × 2 كجم', kg: 12.0 }
+    ];
+
+    let weeklyItems = [];
+
+    weekCrystalFlavors.forEach(fl => {
+      weekCrystalSizes.forEach(sz => {
+        weeklyItems.push({
+          id: `crystal_${fl.key}_${sz.key}`,
+          perfProdId: sz.key.replace('s', (fl.key === 'rose' ? 'cr' : (fl.key === 'flowers' ? 'cf' : 'cfu'))),
+          brand: 'crystal',
+          flavor: fl.key,
+          label: `كريستال ${sz.label} ${fl.name}`,
+          kgPerCarton: sz.kg,
+          active: false,
+          plan: 0,
+          produced: 0
+        });
+      });
+    });
+
+    weekLigaSizes.forEach(sz => {
+      weeklyItems.push({
+        id: `liga_${sz.key}`,
+        perfProdId: sz.key,
+        brand: 'liga',
+        flavor: null,
+        label: `ليجا ${sz.label}`,
+        kgPerCarton: sz.kg,
+        active: false,
+        plan: 0,
+        produced: 0
+      });
+    });
+
+    weekSaahSizes.forEach(sz => {
+      weeklyItems.push({
+        id: `saah_${sz.key}`,
+        perfProdId: sz.key,
+        brand: 'saah',
+        flavor: null,
+        label: `الساعة ${sz.label}`,
+        kgPerCarton: sz.kg,
+        active: false,
+        plan: 0,
+        produced: 0
+      });
+    });
+
+    let weekBrandFilter = 'crystal';
+    let weekFlavorFilter = 'all';
+
+    // ---------------------------------------------------------
+    // ميزة الحفظ التلقائي المحلي الفوري (LocalStorage)
+    // ---------------------------------------------------------
+    let saveTimeout = null;
+    function autoSaveState() {
+      if (saveTimeout) clearTimeout(saveTimeout);
+      saveTimeout = setTimeout(() => {
+        const stateToSave = {
+          mainMachines,
+          smallGroups,
+          silosData,
+          perfumeState,
+          weeklyItems
+        };
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(stateToSave));
+          showSaveIndicator();
+        } catch (e) {
+          console.error("Local storage save failed:", e);
+        }
+      }, 300);
+    }
+
+    function showSaveIndicator() {
+      const el = document.getElementById('save-status-indicator');
+      if (!el) return;
+      el.classList.remove('opacity-0');
+      el.classList.add('opacity-100');
+      setTimeout(() => {
+        el.classList.remove('opacity-100');
+        el.classList.add('opacity-0');
+      }, 1500);
+    }
+
+    function loadSavedState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return;
+        const loaded = JSON.parse(raw);
+        if (loaded.mainMachines) mainMachines = loaded.mainMachines;
+        if (loaded.smallGroups) smallGroups = loaded.smallGroups;
+        if (loaded.silosData) silosData = loaded.silosData;
+        if (loaded.perfumeState) perfumeState = loaded.perfumeState;
+        if (loaded.weeklyItems) {
+          // دمج عناصر الخطة المحفوظة
+          loaded.weeklyItems.forEach(item => {
+            const current = weeklyItems.find(x => x.id === item.id);
+            if (current) {
+              current.active = item.active;
+              current.plan = item.plan;
+              current.produced = item.produced;
+              if (item.kgPerCarton !== undefined) current.kgPerCarton = item.kgPerCarton;
+            }
+          });
+        }
+      } catch (e) {
+        console.warn("Could not parse saved local state", e);
+      }
+    }
+
+    // ---------------------------------------------------------
+    // ميزة التحديد التلقائي لكافة النصوص والأرقام عند الضغط
+    // ---------------------------------------------------------
+    function attachGlobalAutoSelect() {
+      document.addEventListener('focus', function(e) {
+        if (e.target && (e.target.tagName === 'INPUT')) {
+          e.target.select();
+        }
+      }, true);
+
+      document.addEventListener('mouseup', function(e) {
+        if (e.target && (e.target.tagName === 'INPUT') && e.target.type === 'number') {
+          // منع إلغاء التحديد في بعض متصفحات الموبايل والكروم
+          e.target.select();
+        }
+      });
+    }
+
+    // ---------------------------------------------------------
+    // 4. دوال التنقل وإدارة الواجهة
+    // ---------------------------------------------------------
+    function switchTab(tabId) {
+      ['dashboard', 'perfumes', 'packing', 'silos', 'weekly', 'table', 'employee-search'].forEach(t => {
+        const v = document.getElementById(`view-${t}`);
+        const b = document.getElementById(`tab-${t}`);
+        if (v) v.classList.add('hidden');
+        if (b) b.classList.remove('active');
+      });
+      document.getElementById(`view-${tabId}`).classList.remove('hidden');
+      document.getElementById(`tab-${tabId}`).classList.add('active');
+
+      if (tabId === 'dashboard') document.body.style.backgroundColor = '#0B0F19';
+      else document.body.style.backgroundColor = '#F8FAFC';
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function switchPerfumeTab(catKey) {
+      savePerfumeInputs();
+      perfumeState.currentCat = catKey;
+      Object.keys(perfumeConfigs).forEach(k => {
+        const btn = document.getElementById(`pbtn-${k}`);
+        if (btn) {
+          if (k === catKey) btn.classList.add('active');
+          else btn.classList.remove('active');
+        }
+      });
+      renderPerfumeCatUI();
+      autoSaveState();
+    }
+
+    function getSkuLabel(w) {
+      if (w === 0.400) return '400 جرام';
+      if (w === 0.460) return '460 جم (+15%)';
+      if (w === 0.500) return '500 جرام';
+      if (w === 0.700) return '700 جرام';
+      if (w === 2.000) return '2 كجم';
+      if (w === 1.800) return '1.8 كجم';
+      if (w === 2.300) return '2.3 كجم';
+      if (w === 10.000) return 'عبوة 10 كجم';
+      if (w === 25.000) return 'عبوة 25 كجم';
+      return (w * 1000) + ' جرام';
+    }
+
+    // ---------------------------------------------------------
+    // 5. رسم واجهة العطور
+    // ---------------------------------------------------------
+    function renderPerfumeCatUI() {
+      const catKey = perfumeState.currentCat;
+      const conf = perfumeConfigs[catKey];
+      const data = perfumeState.data[catKey];
+      const container = document.getElementById('perfume-view-container');
+
+      let tanksHtml = '';
+      data.tanks.forEach(t => {
+        const info = tanksInfo[t.id];
+        const ucClass = t.uc ? "bg-red-500 text-white shadow-md border border-red-400" : "bg-white text-slate-600 border border-slate-300";
+        const ucText = t.uc ? "👇 Under Cone" : "👆 Above Cone";
+        const ucBtn = info.direct 
+          ? `<span class="text-[10px] text-slate-400 font-bold bg-slate-100 px-2 py-1 rounded-full border border-slate-200">قراءة مباشرة</span>` 
+          : `<button onclick="togglePerfumeUC('${t.id}')" class="text-[10px] px-2 py-1 rounded-full font-black transition-all ${ucClass}">${ucText}</button>`;
+
+        tanksHtml += `
+          <div class="bg-white p-3 rounded-2xl border-2 border-slate-200 shadow-sm relative transition-all">
+            <button onclick="removePerfumeTank('${t.id}')" class="absolute top-2 left-2 bg-red-50 text-red-400 w-6 h-6 rounded-full flex items-center justify-center font-bold text-sm hover:bg-red-500 hover:text-white transition-colors border border-red-100">✕</button>
+            <div class="flex justify-between items-center mb-3 pr-2 ml-6">
+              <h4 class="font-black text-sm text-slate-800 flex items-center gap-1">🛢️ ${info.name} (F=${info.f})</h4>
+              ${ucBtn}
+            </div>
+            <div class="grid grid-cols-2 gap-2 bg-slate-50 p-2 rounded-xl border border-slate-100">
+              <div>
+                <label class="block text-[10px] font-black text-slate-500 mb-1 text-center">بداية الوردية (cm)</label>
+                <input type="number" id="inp-start-${t.id}" value="${t.start}" class="input-style py-1.5 text-sm bg-white" placeholder="0" oninput="calcAllPerfumes()">
+                <div class="text-[11px] text-center mt-1 font-black text-blue-600" id="kg-start-${t.id}">0.0 kg</div>
+              </div>
+              <div>
+                <label class="block text-[10px] font-black text-slate-500 mb-1 text-center">نهاية الوردية (cm)</label>
+                <input type="number" id="inp-end-${t.id}" value="${t.end}" class="input-style py-1.5 text-sm bg-white" placeholder="0" oninput="calcAllPerfumes()">
+                <div class="text-[11px] text-center mt-1 font-black text-rose-600" id="kg-end-${t.id}">0.0 kg</div>
+              </div>
+            </div>
+          </div>
+        `;
+      });
+
+      let prodItemsHtml = conf.items.map(item => {
+        const currentQty = data.prod[item.id] || '';
+        return `
+          <div class="flex items-center justify-between bg-slate-50 p-2 px-3 rounded-xl border border-slate-100">
+            <span class="font-bold text-slate-700 text-sm w-1/2">${item.name}</span>
+            <input type="number" id="prod-${item.id}" value="${currentQty}" placeholder="الكمية" class="input-style w-1/2 py-1.5 text-sm bg-white" oninput="calcAllPerfumes()">
+          </div>
+        `;
+      }).join('');
+
+      container.innerHTML = `
+        <div class="bg-gradient-to-r ${conf.bgColor} p-6 rounded-3xl shadow-xl text-white relative overflow-hidden">
+          <div class="absolute -right-8 -top-8 text-8xl opacity-20">${conf.emoji}</div>
+          <h2 class="text-3xl font-black mb-1 relative z-10">${conf.title}</h2>
+          <p class="text-white/80 text-sm font-bold relative z-10">${conf.subTitle}</p>
+        </div>
+
+        <div class="bg-white border-r-4 ${conf.borderClass} rounded-2xl p-4 flex justify-between items-center shadow-sm">
+          <div>
+            <div class="${conf.colorClass} text-sm font-black">الانحراف (الوفر/الفاقد)</div>
+            <div class="text-xs text-slate-500 font-bold">الفعلي - القياسي</div>
+          </div>
+          <div id="var-badge-${catKey}" class="text-2xl font-black ${conf.colorClass} bg-slate-50 px-4 py-2 rounded-xl shadow-inner border border-slate-100" dir="ltr">0.0 kg</div>
+        </div>
+
+        <!-- إضافة عطارة -->
+        <div class="glass-card rounded-3xl p-5 shadow-lg border border-slate-100">
+          <div class="flex items-center gap-2 mb-4 border-b pb-3">
+            <span class="bg-gradient-to-r ${conf.bgColor} text-white w-8 h-8 rounded-lg flex justify-center items-center font-black">🛢️</span>
+            <h3 class="text-lg font-black text-slate-800">إضافة عطارة (Tanks)</h3>
+          </div>
+          <div class="mb-4 flex gap-2">
+            <select id="sel-tank-add" class="input-style py-2 text-sm flex-1 font-bold bg-slate-50 border-slate-300">
+              <option value="">-- اختر العطارة --</option>
+              <option value="A">عطارة A (فاكتر 3.8)</option>
+              <option value="C">عطارة C (فاكتر 3.5)</option>
+              <option value="D">عطارة D (فاكتر 4.5)</option>
+              <option value="E">عطارة E (فاكتر 1.35)</option>
+              <option value="F">الجديد F (فاكتر 3.5)</option>
+            </select>
+            <button onclick="addPerfumeTank()" class="bg-slate-800 text-white px-4 rounded-xl font-black text-sm shadow-md hover:bg-slate-700 transition-colors">إضافة</button>
+          </div>
+          <div class="space-y-3" id="tanks-list-container">${tanksHtml || '<div class="text-center text-xs text-slate-400 py-2">لا توجد عطارات مضافة</div>'}</div>
+        </div>
+
+        <!-- براميل العطر -->
+        <div class="glass-card rounded-3xl p-5 shadow-lg border border-slate-100">
+          <div class="flex items-center gap-2 mb-4 border-b pb-3">
+            <span class="bg-gradient-to-r ${conf.bgColor} text-white w-8 h-8 rounded-lg flex justify-center items-center font-black">🛢️</span>
+            <h3 class="text-lg font-black text-slate-800">براميل العطر المستقلة</h3>
+          </div>
+          <div class="grid grid-cols-2 gap-4 mb-4">
+            <div class="bg-slate-50 p-3 rounded-2xl border border-slate-200">
+              <label class="block text-xs font-black text-slate-500 mb-2 text-center">بداية الوردية (برميل)</label>
+              <input type="number" id="perf-barrel-start-c" value="${data.b_start_c}" class="input-style" placeholder="0" oninput="calcAllPerfumes()">
+            </div>
+            <div class="bg-slate-50 p-3 rounded-2xl border border-slate-200">
+              <label class="block text-xs font-black text-slate-500 mb-2 text-center">مفتوح البداية (cm)</label>
+              <input type="number" id="perf-barrel-start-o" value="${data.b_start_o}" class="input-style" placeholder="0" oninput="calcAllPerfumes()">
+            </div>
+          </div>
+          <div class="grid grid-cols-2 gap-4 mb-2">
+            <div class="bg-slate-50 p-3 rounded-2xl border border-slate-200">
+              <label class="block text-xs font-black text-slate-500 mb-2 text-center">نهاية الوردية (برميل)</label>
+              <input type="number" id="perf-barrel-end-c" value="${data.b_end_c}" class="input-style" placeholder="0" oninput="calcAllPerfumes()">
+            </div>
+            <div class="bg-slate-50 p-3 rounded-2xl border border-slate-200">
+              <label class="block text-xs font-black text-slate-500 mb-2 text-center">مفتوح النهاية (cm)</label>
+              <input type="number" id="perf-barrel-end-o" value="${data.b_end_o}" class="input-style" placeholder="0" oninput="calcAllPerfumes()">
+            </div>
+          </div>
+          <div class="mt-4 bg-slate-100 text-slate-700 text-center font-black py-2 rounded-xl text-sm" id="perf-actual-box">الاستهلاك الفعلي الإجمالي: 0.0 kg</div>
+        </div>
+
+        <!-- كمية الإنتاج -->
+        <div class="glass-card rounded-3xl p-5 shadow-lg border border-slate-100">
+          <div class="flex items-center gap-2 mb-4 border-b pb-3">
+            <span class="bg-gradient-to-r ${conf.bgColor} text-white w-8 h-8 rounded-lg flex justify-center items-center font-black">📦</span>
+            <h3 class="text-lg font-black text-slate-800">كمية الإنتاج (تتزامن تلقائياً مع الخطة)</h3>
+          </div>
+          <div class="space-y-3">${prodItemsHtml}</div>
+          <div class="mt-4 bg-slate-100 text-slate-700 text-center font-black py-2 rounded-xl text-sm border border-slate-200" id="perf-std-box">الاستهلاك القياسي: 0.0 kg</div>
+        </div>
+      `;
+
+      calcAllPerfumes();
+    }
+
+    function savePerfumeInputs() {
+      const catKey = perfumeState.currentCat;
+      const data = perfumeState.data[catKey];
+      data.tanks.forEach(t => {
+        const s = document.getElementById(`inp-start-${t.id}`);
+        const e = document.getElementById(`inp-end-${t.id}`);
+        if (s) t.start = s.value;
+        if (e) t.end = e.value;
+      });
+
+      const bsc = document.getElementById('perf-barrel-start-c');
+      const bso = document.getElementById('perf-barrel-start-o');
+      const bec = document.getElementById('perf-barrel-end-c');
+      const beo = document.getElementById('perf-barrel-end-o');
+      if (bsc) data.b_start_c = bsc.value;
+      if (bso) data.b_start_o = bso.value;
+      if (bec) data.b_end_c = bec.value;
+      if (beo) data.b_end_o = beo.value;
+
+      perfumeConfigs[catKey].items.forEach(it => {
+        const p = document.getElementById(`prod-${it.id}`);
+        if (p) data.prod[it.id] = p.value;
+      });
+      autoSaveState();
+    }
+
+    function addPerfumeTank() {
+      savePerfumeInputs();
+      const sel = document.getElementById('sel-tank-add');
+      const tId = sel.value;
+      if (!tId) return;
+      const data = perfumeState.data[perfumeState.currentCat];
+      if (data.tanks.some(x => x.id === tId)) {
+        alert("تمت إضافة هذه العطارة مسبقاً في هذه الصفحة!");
+        return;
+      }
+      data.tanks.push({ id: tId, uc: false, start: '', end: '' });
+      renderPerfumeCatUI();
+      autoSaveState();
+    }
+
+    function removePerfumeTank(tId) {
+      savePerfumeInputs();
+      const data = perfumeState.data[perfumeState.currentCat];
+      data.tanks = data.tanks.filter(x => x.id !== tId);
+      renderPerfumeCatUI();
+      autoSaveState();
+    }
+
+    function togglePerfumeUC(tId) {
+      savePerfumeInputs();
+      const data = perfumeState.data[perfumeState.currentCat];
+      const t = data.tanks.find(x => x.id === tId);
+      if (t) {
+        t.uc = !t.uc;
+        renderPerfumeCatUI();
+        autoSaveState();
+      }
+    }
+
+    function calcTankKg(tankId, readingCm, isUc) {
+      if (isNaN(readingCm) || readingCm === '') return 0;
+      const t = tanksInfo[tankId];
+      let lvl = 0;
+      const num = parseFloat(readingCm);
+      if (t.direct) lvl = num;
+      else {
+        if (isUc) lvl = num;
+        else lvl = (50 - num) + t.offset;
+      }
+      return Math.max(0, lvl) * t.f;
+    }
+
+    function calcAllPerfumes() {
+      savePerfumeInputs();
+
+      let totalVariance = 0;
+      let crystalVariance = 0;
+      let legaVar = 0;
+      let saahVar = 0;
+
+      Object.keys(perfumeConfigs).forEach(cat => {
+        const conf = perfumeConfigs[cat];
+        const data = perfumeState.data[cat];
+
+        let tankStartKg = 0;
+        let tankEndKg = 0;
+
+        data.tanks.forEach(t => {
+          const sKg = calcTankKg(t.id, t.start, t.uc);
+          const eKg = calcTankKg(t.id, t.end, t.uc);
+          tankStartKg += sKg;
+          tankEndKg += eKg;
+
+          if (cat === perfumeState.currentCat) {
+            const sEl = document.getElementById(`kg-start-${t.id}`);
+            const eEl = document.getElementById(`kg-end-${t.id}`);
+            if (sEl) sEl.innerText = `${sKg.toFixed(1)} kg`;
+            if (eEl) eEl.innerText = `${eKg.toFixed(1)} kg`;
+          }
+        });
+
+        const maxCm = conf.maxCm;
+        const bsc = parseFloat(data.b_start_c) || 0;
+        const bso = parseFloat(data.b_start_o) || 0;
+        const bec = parseFloat(data.b_end_c) || 0;
+        const beo = parseFloat(data.b_end_o) || 0;
+
+        const barrelStartKg = (bsc * maxCm + bso) * 2.5;
+        const barrelEndKg = (bec * maxCm + beo) * 2.5;
+
+        const actual = (tankStartKg + barrelStartKg) - (tankEndKg + barrelEndKg);
+
+        let std = 0;
+        conf.items.forEach(item => {
+          const qty = parseFloat(data.prod[item.id]) || 0;
+          std += (qty * item.weight) * conf.ratio;
+        });
+
+        const variance = actual - std;
+        totalVariance += variance;
+
+        if (cat === 'lega') legaVar = variance;
+        else if (cat === 'alsaa') saahVar = variance;
+        else crystalVariance += variance;
+
+        if (cat === perfumeState.currentCat) {
+          const actEl = document.getElementById('perf-actual-box');
+          const stdEl = document.getElementById('perf-std-box');
+          const varBadge = document.getElementById(`var-badge-${cat}`);
+          if (actEl) actEl.innerText = `الاستهلاك الفعلي الإجمالي: ${actual.toFixed(2)} kg`;
+          if (stdEl) stdEl.innerText = `الاستهلاك القياسي: ${std.toFixed(2)} kg`;
+          if (varBadge) {
+            const sign = variance > 0 ? "+" : "";
+            const colorClass = variance > 0 ? "text-red-600" : variance < 0 ? "text-emerald-600" : "text-slate-600";
+            varBadge.innerText = `${sign}${variance.toFixed(2)} kg`;
+            varBadge.className = `text-2xl font-black bg-slate-50 px-4 py-2 rounded-xl shadow-inner border border-slate-100 ${colorClass}`;
+          }
+        }
+      });
+
+      const dashTotal = document.getElementById('dash-total-variance');
+      const dashBadge = document.getElementById('dash-status-badge');
+      const dashLega = document.getElementById('dash-lega');
+      const dashCrystal = document.getElementById('dash-crystal');
+      const dashAlsaa = document.getElementById('dash-alsaa');
+
+      const sign = totalVariance > 0 ? '+' : '';
+      dashTotal.innerText = `${sign}${totalVariance.toFixed(2)}`;
+
+      if (totalVariance > 0.1) {
+        dashTotal.className = "text-4xl md:text-5xl font-black tracking-tighter text-rose-300";
+        dashBadge.className = "mt-3 inline-block px-5 py-1 rounded-full text-xs font-black bg-rose-500/30 text-rose-200 border border-rose-500/40";
+        dashBadge.innerText = "فاقد ⚠️";
+      } else if (totalVariance < -0.1) {
+        dashTotal.className = "text-4xl md:text-5xl font-black tracking-tighter text-emerald-300";
+        dashBadge.className = "mt-3 inline-block px-5 py-1 rounded-full text-xs font-black bg-emerald-500/30 text-emerald-200 border border-emerald-500/40";
+        dashBadge.innerText = "وفر ✅";
+      } else {
+        dashTotal.className = "text-4xl md:text-5xl font-black tracking-tighter text-white";
+        dashBadge.className = "mt-3 inline-block px-5 py-1 rounded-full text-xs font-black bg-white/20 text-white";
+        dashBadge.innerText = "مضبوط ⚖️";
+      }
+
+      dashLega.innerText = `${legaVar > 0 ? '+' : ''}${legaVar.toFixed(1)}`;
+      dashLega.className = `font-black text-sm ${legaVar > 0 ? 'text-rose-300' : (legaVar < 0 ? 'text-emerald-300' : 'text-white')}`;
+
+      dashCrystal.innerText = `${crystalVariance > 0 ? '+' : ''}${crystalVariance.toFixed(1)}`;
+      dashCrystal.className = `font-black text-sm ${crystalVariance > 0 ? 'text-rose-300' : (crystalVariance < 0 ? 'text-emerald-300' : 'text-white')}`;
+
+      dashAlsaa.innerText = `${saahVar > 0 ? '+' : ''}${saahVar.toFixed(1)}`;
+      dashAlsaa.className = `font-black text-sm ${saahVar > 0 ? 'text-rose-300' : (saahVar < 0 ? 'text-emerald-300' : 'text-white')}`;
+    }
+
+    // ---------------------------------------------------------
+    // 6. رسم وحساب خطوط التعبئة (Packaging Lines) بتصميم 3D
+    // ---------------------------------------------------------
+    function renderPackagingLines() {
+      const container = document.getElementById('main-machines-container');
+      container.innerHTML = Object.keys(mainMachines).map(k => {
+        const m = mainMachines[k];
+        return `
+          <div class="machine-card machine-card-${m.brand} p-3.5 flex flex-wrap justify-between items-center gap-3">
+            <div class="flex items-center gap-2.5">
+              <!-- عنوان ثلاثي الأبعاد ذو لون وظل بارز متباين -->
+              <div class="machine-title-badge">
+                <span class="text-blue-600">⚡</span>
+                <span>${m.name}</span>
+              </div>
+              <span class="text-[11px] bg-slate-100 text-slate-600 font-black px-2.5 py-1 rounded-xl border border-slate-200 shadow-inner">
+                ${m.isManual ? 'يدوي' : m.speed + ' ppm'}
+              </span>
+            </div>
+
+            <div class="flex items-center flex-wrap gap-2">
+              ${m.isManual ? `<span class="badge-perf bg-amber-50 text-amber-800 font-black border border-amber-200">ليجا فقط</span>` : `
+              <div class="flex bg-slate-100 p-1 rounded-xl gap-1 border border-slate-200">
+                <button class="px-2.5 py-1 rounded-lg font-black text-xs ${m.brand === 'crystal' ? 'bg-blue-600 text-white shadow' : 'text-slate-600'}" onclick="setBrand('${k}', 'crystal')">كرستال</button>
+                <button class="px-2.5 py-1 rounded-lg font-black text-xs ${m.brand === 'liga' ? 'bg-amber-600 text-white shadow' : 'text-slate-600'}" onclick="setBrand('${k}', 'liga')">ليجا</button>
+                <button class="px-2.5 py-1 rounded-lg font-black text-xs ${m.brand === 'saah' ? 'bg-emerald-600 text-white shadow' : 'text-slate-600'}" onclick="setBrand('${k}', 'saah')">الساعة</button>
+              </div>`}
+
+              <select class="input-style py-1 text-xs w-36 bg-white" onchange="updateSku('${k}', this.value)">
+                ${m.isManual ? `
+                  <option value="10.000" ${m.sku === 10 ? 'selected' : ''}>10 كجم (1200/وردية)</option>
+                  <option value="25.000" ${m.sku === 25 ? 'selected' : ''}>25 كجم (750/وردية)</option>
+                ` : `
+                  <option value="0.400" ${m.sku === 0.4 ? 'selected' : ''}>400 جرام</option>
+                  <option value="0.460" ${m.sku === 0.46 ? 'selected' : ''}>460 جم (+15%)</option>
+                  <option value="0.500" ${m.sku === 0.5 ? 'selected' : ''}>500 جرام</option>
+                  <option value="0.700" ${m.sku === 0.7 ? 'selected' : ''}>700 جرام</option>
+                  <option value="1.800" ${m.sku === 1.8 ? 'selected' : ''}>1.8 كجم</option>
+                  <option value="2.000" ${m.sku === 2.0 ? 'selected' : ''}>2 كجم</option>
+                  <option value="2.300" ${m.sku === 2.3 ? 'selected' : ''}>2.3 كجم</option>
+                `}
+              </select>
+
+              <button id="btn-${m.domId}" onclick="toggleLine('${k}')" class="px-4 py-1.5 rounded-xl font-black text-xs shadow-sm transition-transform active:scale-95 ${m.active ? 'bg-emerald-100 text-emerald-800 border border-emerald-300' : 'bg-rose-100 text-rose-800 border border-rose-300'}">
+                ${m.active ? 'شغالة' : 'متوقفة'}
+              </button>
+            </div>
+            <div class="machine-metrics">
+              <div class="machine-metric"><span class="machine-metric-label">الإنتاج في الساعة</span><span class="machine-metric-value">${Math.round(m.active ? (m.speed * 60 * m.sku) : 0).toLocaleString()} كجم/ساعة</span></div>
+              <div class="machine-metric"><span class="machine-metric-label">إنتاج الوردية (12 ساعة)</span><span class="machine-metric-value">${((m.active ? (m.speed * 60 * m.sku) * 12 : 0) / 1000).toFixed(2)} طن</span></div>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      renderSmallCards();
+    }
+
+    function renderSmallCards() {
+      const container = document.getElementById('small-machines-container');
+      container.innerHTML = smallGroups.map((grp, index) => {
+        let skuOptionsHtml = smallSkuOptions.map(opt => 
+          `<option value="${opt.val}" ${grp.sku === opt.val ? 'selected' : ''}>${opt.label}</option>`
+        ).join('');
+
+        return `
+          <div class="machine-card machine-card-${grp.brand} p-4 ${grp.count === 0 ? 'opacity-60' : ''}">
+            <div class="flex justify-between items-center mb-2.5">
+              <!-- عنوان المجموعة ثلاثي الأبعاد -->
+              <div class="small-group-badge">
+                <span>📦</span>
+                <span>${grp.name}</span>
+                ${grp.isNew ? '<span class="text-[9px] bg-blue-600 text-white font-black px-1.5 py-0.5 rounded-md shadow-sm">جديد</span>' : ''}
+              </div>
+
+              <!-- عداد المكائن المدمج -->
+              <div class="flex items-center bg-slate-100 border border-slate-200 rounded-xl p-0.5 gap-1 shadow-inner">
+                <button class="stepper-btn w-6 h-6 text-xs" onclick="stepSmallCount(${index}, -1)">-</button>
+                <span class="font-black text-sm min-w-[22px] text-center text-slate-800">${grp.count}</span>
+                <button class="stepper-btn w-6 h-6 text-xs" onclick="stepSmallCount(${index}, 1)">+</button>
+              </div>
+            </div>
+
+            <!-- أزرار اختيار الصنف -->
+            <div class="flex bg-slate-100 p-1 rounded-xl gap-1 my-2 border border-slate-200">
+              <button class="flex-1 py-1 rounded-lg font-black text-xs ${grp.brand === 'crystal' ? 'bg-blue-600 text-white shadow' : 'text-slate-600'}" onclick="setSmallBrand(${index}, 'crystal')">كرستال</button>
+              <button class="flex-1 py-1 rounded-lg font-black text-xs ${grp.brand === 'liga' ? 'bg-amber-600 text-white shadow' : 'text-slate-600'}" onclick="setSmallBrand(${index}, 'liga')">ليجا</button>
+              <button class="flex-1 py-1 rounded-lg font-black text-xs ${grp.brand === 'saah' ? 'bg-emerald-600 text-white shadow' : 'text-slate-600'}" onclick="setSmallBrand(${index}, 'saah')">الساعة</button>
+            </div>
+
+            <div class="flex justify-between items-center mt-2 pt-2 border-t border-slate-100">
+              <span class="text-[11px] font-black text-slate-500">حجم العبوة:</span>
+              <select class="input-style py-1 text-xs w-36 bg-white" onchange="setSmallSku(${index}, this.value)">
+                ${skuOptionsHtml}
+              </select>
+            </div>
+            <div class="machine-metrics mt-3">
+              <div class="machine-metric"><span class="machine-metric-label">إنتاج المجموعة في الساعة</span><span class="machine-metric-value">${Math.round(grp.count * (grp.speed * 60 * grp.sku)).toLocaleString()} كجم/ساعة</span></div>
+              <div class="machine-metric"><span class="machine-metric-label">إنتاج المجموعة في الوردية</span><span class="machine-metric-value">${((grp.count * (grp.speed * 60 * grp.sku) * 12) / 1000).toFixed(2)} طن</span></div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function toggleLine(key) {
+      const m = mainMachines[key];
+      m.active = !m.active;
+      renderPackagingLines();
+      calculateAll();
+      autoSaveState();
+    }
+    function setBrand(key, b) {
+      mainMachines[key].brand = b;
+      renderPackagingLines();
+      calculateAll();
+      autoSaveState();
+    }
+    function updateSku(key, val) {
+      const weight = parseFloat(val);
+      const m = mainMachines[key];
+      m.sku = weight;
+      if (m.isManual) {
+        if (weight === 25.0) {
+          m.shiftPackages = 750;
+          m.speed = (750 / 12) / 60;
+        } else {
+          m.shiftPackages = 1200;
+          m.speed = (1200 / 12) / 60;
+        }
+      }
+      renderPackagingLines();
+      calculateAll();
+      autoSaveState();
+    }
+    function stepSmallCount(index, delta) {
+      const grp = smallGroups[index];
+      const newCount = grp.count + delta;
+      if (newCount >= 0 && newCount <= 4) {
+        grp.count = newCount;
+        renderSmallCards();
+        calculateAll();
+        autoSaveState();
+      }
+    }
+    function setAllSmallCounts(val) {
+      smallGroups.forEach(grp => grp.count = val);
+      renderSmallCards();
+      calculateAll();
+      autoSaveState();
+    }
+    function setSmallBrand(index, b) {
+      smallGroups[index].brand = b;
+      renderSmallCards();
+      calculateAll();
+      autoSaveState();
+    }
+    function setSmallSku(index, val) {
+      smallGroups[index].sku = parseFloat(val);
+      renderSmallCards();
+      calculateAll();
+      autoSaveState();
+    }
+
+    // ---------------------------------------------------------
+    // 7. حسابات البودرة، التقرير، وجبات البرج، والداشبورد الداخلي
+    // ---------------------------------------------------------
+    function calculateAll() {
+      let grandTotalKgHour = 0;
+      let totalActiveMachines = 0;
+
+      const brandStats = {
+        crystal: { kgHour: 0, machines: 0, shiftTon: 0 },
+        liga: { kgHour: 0, machines: 0, shiftTon: 0 },
+        saah: { kgHour: 0, machines: 0, shiftTon: 0 }
+      };
+
+      const tableBody = document.getElementById('summary-table-body');
+      let tableHtml = '';
+
+      Object.keys(mainMachines).forEach(k => {
+        const m = mainMachines[k];
+        const kgHour = m.active ? (m.speed * 60 * m.sku) : 0;
+        if (m.active) {
+          grandTotalKgHour += kgHour;
+          totalActiveMachines += 1;
+          brandStats[m.brand].kgHour += kgHour;
+          brandStats[m.brand].machines += 1;
+        }
+
+        let speedText = m.isManual ? `${m.shiftPackages} عبوة/وردية` : `${m.speed} عبوة/د`;
+
+        tableHtml += `
+          <tr class="${!m.active ? 'opacity-40 bg-slate-50' : 'hover:bg-slate-50'}">
+            <td class="p-3 font-black text-slate-800">${m.name}</td>
+            <td class="p-3"><span class="badge-perf bg-slate-100">${BRANDS[m.brand].emoji} ${BRANDS[m.brand].name}</span></td>
+            <td class="p-3 font-bold">${getSkuLabel(m.sku)}</td>
+            <td class="p-3 font-black ${m.active ? 'text-emerald-600' : 'text-rose-600'}">${m.active ? '1 مكينة' : 'متوقفة'}</td>
+            <td class="p-3 text-slate-500">${speedText}</td>
+            <td class="p-3 font-black">${Math.round(kgHour).toLocaleString()} كجم</td>
+            <td class="p-3 font-black text-blue-700">${((kgHour * 12) / 1000).toFixed(2)} طن</td>
+            <td class="p-3 font-black text-emerald-700">${((kgHour * 24) / 1000).toFixed(2)} طن</td>
+          </tr>
+        `;
+      });
+
+      smallGroups.forEach(grp => {
+        const activeCount = grp.count;
+        const kgHour = activeCount * (grp.speed * 60 * grp.sku);
+        if (activeCount > 0) {
+          grandTotalKgHour += kgHour;
+          totalActiveMachines += activeCount;
+          brandStats[grp.brand].kgHour += kgHour;
+          brandStats[grp.brand].machines += activeCount;
+        }
+
+        tableHtml += `
+          <tr class="${activeCount === 0 ? 'opacity-40 bg-slate-50' : 'hover:bg-slate-50'}">
+            <td class="p-3 font-black text-slate-800">${grp.name}</td>
+            <td class="p-3"><span class="badge-perf bg-slate-100">${BRANDS[grp.brand].emoji} ${BRANDS[grp.brand].name}</span></td>
+            <td class="p-3 font-bold">${getSkuLabel(grp.sku)}</td>
+            <td class="p-3 font-black ${activeCount > 0 ? 'text-emerald-600' : 'text-rose-600'}">${activeCount} من 4</td>
+            <td class="p-3 text-slate-500">${grp.speed} عبوة/د</td>
+            <td class="p-3 font-black">${Math.round(kgHour).toLocaleString()} كجم</td>
+            <td class="p-3 font-black text-blue-700">${((kgHour * 12) / 1000).toFixed(2)} طن</td>
+            <td class="p-3 font-black text-emerald-700">${((kgHour * 24) / 1000).toFixed(2)} طن</td>
+          </tr>
+        `;
+      });
+
+      const shiftKg = grandTotalKgHour * 12;
+      const dayKg = grandTotalKgHour * 24;
+      const hourTon = grandTotalKgHour / 1000;
+      const shiftTon = shiftKg / 1000;
+      const dayTon = dayKg / 1000;
+
+      // 1. تحديث شاشة الملخص الرئيسية
+      document.getElementById('dash-shift-ton').innerHTML = `${shiftTon.toFixed(2)} <span class="text-xs">طن</span>`;
+      document.getElementById('dash-hour-ton').innerHTML = `${hourTon.toFixed(2)} <span class="text-xs">طن/س</span>`;
+      document.getElementById('dash-active-count').innerText = totalActiveMachines;
+
+      // 2. تحديث الداشبورد المخصص لصفحة التعبئة
+      const packDashActive = document.getElementById('pack-dash-active');
+      const packDashActivePct = document.getElementById('pack-dash-active-pct');
+      const packDashHour = document.getElementById('pack-dash-hour');
+      const packDashKgHour = document.getElementById('pack-dash-kghour');
+      const packDashShift = document.getElementById('pack-dash-shift');
+      const packDashDay = document.getElementById('pack-dash-day');
+
+      if (packDashActive) packDashActive.innerText = totalActiveMachines;
+      if (packDashActivePct) {
+        const pctAct = Math.round((totalActiveMachines / 34) * 100);
+        packDashActivePct.innerText = `نسبة التشغيل: ${pctAct}%`;
+      }
+      if (packDashHour) packDashHour.innerHTML = `${hourTon.toFixed(2)} <span class="text-xs">طن/س</span>`;
+      if (packDashKgHour) packDashKgHour.innerText = `${Math.round(grandTotalKgHour).toLocaleString()} كجم/ساعة`;
+      if (packDashShift) packDashShift.innerHTML = `${shiftTon.toFixed(2)} <span class="text-xs">طن</span>`;
+      if (packDashDay) packDashDay.innerHTML = `${dayTon.toFixed(2)} <span class="text-xs">طن</span>`;
+
+      // تحديث إحصائيات الأصناف
+      ['crystal', 'liga', 'saah'].forEach(bKey => {
+        const b = brandStats[bKey];
+        b.shiftTon = (b.kgHour * 12) / 1000;
+        const pct = grandTotalKgHour > 0 ? ((b.kgHour / grandTotalKgHour) * 100).toFixed(0) : 0;
+        
+        // الملخص
+        document.getElementById(`dash-brand-shift-${bKey}`).innerText = `${b.shiftTon.toFixed(2)} طن`;
+        document.getElementById(`dash-brand-hour-${bKey}`).innerText = `معدل: ${Math.round(b.kgHour).toLocaleString()} كجم/ساعة | ${b.machines} مكائن`;
+        document.getElementById(`dash-pct-${bKey}`).innerText = `${pct}%`;
+
+        // داشبورد صفحة التعبئة
+        const packBrandEl = document.getElementById(`pack-dash-${bKey}`);
+        const packBrandMc = document.getElementById(`pack-dash-${bKey}-mc`);
+        if (packBrandEl) packBrandEl.innerText = `${b.shiftTon.toFixed(2)} طن`;
+        if (packBrandMc) packBrandMc.innerText = `${b.machines} مكائن عاملة`;
+      });
+
+      tableBody.innerHTML = tableHtml;
+      document.getElementById('tfoot-active-count').innerText = `${totalActiveMachines} مكينة`;
+      document.getElementById('tfoot-hour').innerText = `${hourTon.toFixed(2)} طن`;
+      document.getElementById('tfoot-shift').innerText = `${shiftTon.toFixed(2)} طن`;
+      document.getElementById('tfoot-day').innerText = `${dayTon.toFixed(2)} طن`;
+
+      // حسابات السيلوهات ووجبات البرج
+      const siloStockTotals = { crystal: 0, liga: 0, saah: 0 };
+      let allSilosTotal = 0;
+      silosData.forEach(s => {
+        if (s.brand !== 'empty' && siloStockTotals[s.brand] !== undefined) {
+          siloStockTotals[s.brand] += s.stock;
+        }
+        allSilosTotal += s.stock;
+      });
+      document.getElementById('total-silos-stock').innerText = allSilosTotal.toFixed(2);
+
+      let quickBatchesHtml = '';
+      let towerCardsHtml = '';
+
+      ['crystal', 'liga', 'saah'].forEach(brandKey => {
+        const demandShift = brandStats[brandKey].shiftTon;
+        const currentStock = siloStockTotals[brandKey] || 0;
+        const deficit = Math.max(0, demandShift - currentStock);
+        const batchesNeeded = deficit > 0 ? Math.ceil(deficit / BATCH_SIZE) : 0;
+        const totalBatchProduction = batchesNeeded * BATCH_SIZE;
+
+        quickBatchesHtml += `
+          <div class="p-3 rounded-2xl bg-slate-50 border border-slate-200">
+            <div class="flex justify-between items-center mb-1">
+              <span class="font-black text-xs text-slate-800">${BRANDS[brandKey].emoji} ${BRANDS[brandKey].name}</span>
+              <span class="font-black text-sm ${batchesNeeded > 0 ? 'text-blue-700' : 'text-emerald-600'}">${batchesNeeded} وجبة</span>
+            </div>
+            <div class="text-[11px] text-slate-500 font-bold">
+              ${deficit > 0 ? `عجز: ${deficit.toFixed(1)} طن (إنتاج: ${totalBatchProduction.toFixed(1)} طن)` : 'المخزون يغطي الوردية ✓'}
+            </div>
+          </div>
+        `;
+
+        towerCardsHtml += `
+          <div class="p-4 rounded-3xl bg-white border-2 border-slate-200 shadow-sm">
+            <div class="flex justify-between items-center mb-2">
+              <span class="badge-perf bg-blue-50 text-blue-900">${BRANDS[brandKey].emoji} ${BRANDS[brandKey].name}</span>
+              <span class="text-xs font-bold text-slate-400">1.8 طن/وجبة</span>
+            </div>
+            <div class="text-3xl font-black text-blue-700 my-1">${batchesNeeded}</div>
+            <div class="text-xs font-black ${deficit > 0 ? 'text-blue-900' : 'text-emerald-600'} mb-3">
+              ${deficit > 0 ? `مطلوب إنتاج ${batchesNeeded} وجبة (${totalBatchProduction.toFixed(1)} طن)` : 'المخزون يغطي احتياج الوردية بالكامل ✓'}
+            </div>
+            <div class="space-y-1 text-xs border-t border-slate-100 pt-2 font-bold text-slate-600">
+              <div class="flex justify-between"><span>سحب التعبئة:</span><strong>${demandShift.toFixed(2)} طن</strong></div>
+              <div class="flex justify-between"><span>رصيد السيلو:</span><strong class="text-emerald-600">${currentStock.toFixed(2)} طن</strong></div>
+              <div class="flex justify-between"><span>صافي العجز:</span><strong class="text-rose-600">${deficit.toFixed(2)} طن</strong></div>
+              <div class="flex justify-between text-blue-800 pt-1 font-black"><span>الإنتاج الفعلي:</span><strong>${totalBatchProduction.toFixed(2)} طن</strong></div>
+            </div>
+          </div>
+        `;
+      });
+
+      document.getElementById('quick-batches-summary').innerHTML = quickBatchesHtml;
+      document.getElementById('tower-batches-cards').innerHTML = towerCardsHtml;
+    }
+
+    // ---------------------------------------------------------
+    // 8. رسم السيلوهات A, B, C, A1
+    // ---------------------------------------------------------
+    function renderSilos() {
+      const container = document.getElementById('silos-cards-container');
+      container.innerHTML = silosData.map((silo, idx) => `
+        <div class="p-4 bg-white rounded-3xl border-2 border-slate-200 shadow-sm">
+          <div class="flex justify-between items-center mb-3">
+            <div class="font-black text-base text-slate-800 flex items-center gap-1.5">
+              <span class="w-2.5 h-2.5 rounded-full bg-emerald-600"></span>
+              ${silo.name}
+            </div>
+            <span class="badge-perf bg-slate-100">${BRANDS[silo.brand].emoji} ${BRANDS[silo.brand].name}</span>
+          </div>
+          <div class="mb-3">
+            <label class="block text-[11px] font-black text-slate-500 mb-1">الصنف المخزن:</label>
+            <div class="flex bg-slate-100 p-1 rounded-xl gap-1">
+              <button class="flex-1 py-1 rounded-lg font-black text-xs ${silo.brand === 'crystal' ? 'bg-blue-600 text-white shadow' : 'text-slate-600'}" onclick="setSiloBrand(${idx}, 'crystal')">كرستال</button>
+              <button class="flex-1 py-1 rounded-lg font-black text-xs ${silo.brand === 'liga' ? 'bg-amber-600 text-white shadow' : 'text-slate-600'}" onclick="setSiloBrand(${idx}, 'liga')">ليجا</button>
+              <button class="flex-1 py-1 rounded-lg font-black text-xs ${silo.brand === 'saah' ? 'bg-emerald-600 text-white shadow' : 'text-slate-600'}" onclick="setSiloBrand(${idx}, 'saah')">الساعة</button>
+              <button class="py-1 px-2 rounded-lg font-black text-xs ${silo.brand === 'empty' ? 'bg-slate-700 text-white shadow' : 'text-slate-600'}" onclick="setSiloBrand(${idx}, 'empty')">فارغ</button>
+            </div>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">رصيد أول الوردية (طن):</label>
+            <input type="number" step="0.1" min="0" value="${silo.stock}" class="input-style" onchange="updateSiloStock(${idx}, this.value)">
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function setSiloBrand(idx, b) {
+      silosData[idx].brand = b;
+      renderSilos();
+      calculateAll();
+      autoSaveState();
+    }
+    function updateSiloStock(idx, val) {
+      silosData[idx].stock = Math.max(0, parseFloat(val) || 0);
+      calculateAll();
+      autoSaveState();
+    }
+
+    // ---------------------------------------------------------
+    // 9. الخطة الأسبوعية والمزامنة الذكية
+    // ---------------------------------------------------------
+    function renderWeekTabs() {
+      const container = document.getElementById('week-icon-tabs-container');
+      container.innerHTML = ['crystal', 'liga', 'saah'].map(bKey => {
+        const meta = BRANDS[bKey];
+        const isActive = weekBrandFilter === bKey;
+        return `
+          <button type="button" class="flex-1 flex flex-col items-center gap-1.5 p-3 rounded-2xl border-2 transition-all ${isActive ? 'bg-blue-50 border-blue-600 text-blue-900 shadow-md scale-102' : 'bg-white border-slate-200 text-slate-600'}" onclick="switchWeekBrand('${bKey}')">
+            <span class="text-2xl">${meta.emoji}</span>
+            <span class="text-xs font-black">${meta.name}</span>
+          </button>
+        `;
+      }).join('');
+
+      const flavorContainer = document.getElementById('week-flavor-chips-container');
+      if (weekBrandFilter === 'crystal') {
+        flavorContainer.classList.remove('hidden');
+        let chipsHtml = `<button type="button" class="px-4 py-1.5 rounded-full text-xs font-black ${weekFlavorFilter === 'all' ? 'bg-slate-800 text-white shadow' : 'bg-slate-100 text-slate-600'}" onclick="switchWeekFlavor('all')">الكل</button>`;
+        chipsHtml += weekCrystalFlavors.map(fl => {
+          const isActive = weekFlavorFilter === fl.key;
+          return `<button type="button" class="px-4 py-1.5 rounded-full text-xs font-black ${isActive ? 'text-white shadow' : 'bg-slate-100 text-slate-600'}" style="${isActive ? `background:${fl.color};` : ''}" onclick="switchWeekFlavor('${fl.key}')">${fl.name}</button>`;
+        }).join('');
+        flavorContainer.innerHTML = chipsHtml;
+      } else {
+        flavorContainer.classList.add('hidden');
+      }
+    }
+
+    function switchWeekBrand(b) {
+      weekBrandFilter = b;
+      weekFlavorFilter = 'all';
+      renderWeekTabs();
+      renderWeekItems();
+    }
+    function switchWeekFlavor(f) {
+      weekFlavorFilter = f;
+      renderWeekTabs();
+      renderWeekItems();
+    }
+
+    function renderWeekItems() {
+      const container = document.getElementById('week-items-container');
+      let items = weeklyItems.filter(it => it.brand === weekBrandFilter);
+      if (weekBrandFilter === 'crystal' && weekFlavorFilter !== 'all') {
+        items = items.filter(it => it.flavor === weekFlavorFilter);
+      }
+
+      container.innerHTML = items.map(it => {
+        const planTon = (it.plan * it.kgPerCarton) / 1000;
+        const producedTon = (it.produced * it.kgPerCarton) / 1000;
+        const remainTon = Math.max(0, planTon - producedTon);
+        const pct = planTon > 0 ? Math.min(100, (producedTon / planTon) * 100) : 0;
+        const brandColor = BRANDS[it.brand].color;
+
+        return `
+          <div class="p-3.5 bg-white border-2 ${it.active ? 'border-blue-300 shadow-md' : 'border-slate-200 opacity-60'} rounded-3xl transition-all" id="week-card-${it.id}">
+            <div class="flex flex-wrap items-center justify-between gap-3">
+              <div class="flex items-center gap-3">
+                <div class="custom-toggle ${it.active ? 'on' : ''}" onclick="toggleWeekItem('${it.id}')"></div>
+                <span class="font-black text-sm text-slate-800">${it.label}</span>
+              </div>
+              <div class="flex items-center gap-1.5 text-xs text-slate-500 font-bold">
+                وزن العبوة (كجم):
+                <input type="number" step="0.001" min="0" value="${it.kgPerCarton.toFixed(3)}" class="input-style w-20 py-1 text-xs" onchange="updateWeekWeight('${it.id}', this.value)">
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-3 ${it.active ? '' : 'hidden'}" id="week-fields-${it.id}">
+              <div>
+                <label class="block text-[11px] font-bold text-slate-500 mb-1">الخطة (عبوة)</label>
+                <input type="number" min="0" value="${it.plan}" class="input-style py-1 text-xs" onchange="updateWeekPlan('${it.id}', this.value)">
+              </div>
+              <div>
+                <label class="block text-[11px] font-bold text-slate-500 mb-1">المنتج (عبوة)</label>
+                <input type="number" min="0" value="${it.produced}" class="input-style py-1 text-xs font-black text-emerald-600" onchange="updateWeekProduced('${it.id}', this.value)">
+              </div>
+              <div>
+                <label class="block text-[11px] font-bold text-slate-500 mb-1">المتبقي (طن)</label>
+                <div class="text-center font-black text-rose-600 py-1" id="week-remain-${it.id}">${remainTon.toFixed(3)}</div>
+              </div>
+              <div>
+                <label class="block text-[11px] font-bold text-slate-500 mb-1">الإنجاز</label>
+                <div class="text-center font-black py-0.5" style="color:${brandColor}" id="week-pct-${it.id}">${pct.toFixed(0)}%</div>
+                <div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden mt-1">
+                  <div id="week-bar-${it.id}" style="width:${pct}%; background:${brandColor}; height: 100%;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      document.getElementById('week-items-count').innerText = `${items.filter(it => it.active).length} نشط من ${items.length}`;
+    }
+
+    function toggleWeekItem(id) {
+      const item = weeklyItems.find(it => it.id === id);
+      item.active = !item.active;
+      renderWeekItems();
+      calculateWeeklyPlan();
+      autoSaveState();
+    }
+    function updateWeekWeight(id, val) {
+      const item = weeklyItems.find(it => it.id === id);
+      item.kgPerCarton = Math.max(0, parseFloat(val) || 0);
+      calculateWeeklyPlan();
+      updateWeekItemRow(item);
+      autoSaveState();
+    }
+    function updateWeekPlan(id, val) {
+      const item = weeklyItems.find(it => it.id === id);
+      item.plan = Math.max(0, parseInt(val) || 0);
+      calculateWeeklyPlan();
+      updateWeekItemRow(item);
+      autoSaveState();
+    }
+    function updateWeekProduced(id, val) {
+      const item = weeklyItems.find(it => it.id === id);
+      item.produced = Math.max(0, parseInt(val) || 0);
+      
+      syncProducedToPerfume(item);
+      calculateWeeklyPlan();
+      updateWeekItemRow(item);
+      autoSaveState();
+    }
+
+    function syncProducedToPerfume(item) {
+      if (!item.perfProdId) return;
+      let targetCat = null;
+      if (item.brand === 'liga') targetCat = 'liga';
+      else if (item.brand === 'saah') targetCat = 'alsaa';
+      else if (item.brand === 'crystal') {
+        if (item.flavor === 'rose') targetCat = 'crystal_rose';
+        else if (item.flavor === 'flowers') targetCat = 'crystal_flowers';
+        else if (item.flavor === 'full') targetCat = 'crystal_full';
+      }
+
+      if (targetCat && perfumeState.data[targetCat]) {
+        perfumeState.data[targetCat].prod[item.perfProdId] = item.produced;
+        const pInput = document.getElementById(`prod-${item.perfProdId}`);
+        if (pInput) pInput.value = item.produced;
+        calcAllPerfumes();
+      }
+    }
+
+    function updateWeekItemRow(item) {
+      const planTon = (item.plan * item.kgPerCarton) / 1000;
+      const producedTon = (item.produced * item.kgPerCarton) / 1000;
+      const remainTon = Math.max(0, planTon - producedTon);
+      const pct = planTon > 0 ? Math.min(100, (producedTon / planTon) * 100) : 0;
+
+      const remainEl = document.getElementById(`week-remain-${item.id}`);
+      const pctEl = document.getElementById(`week-pct-${item.id}`);
+      const barEl = document.getElementById(`week-bar-${item.id}`);
+      if (remainEl) remainEl.innerText = remainTon.toFixed(3);
+      if (pctEl) pctEl.innerText = `${pct.toFixed(0)}%`;
+      if (barEl) barEl.style.width = `${pct}%`;
+    }
+
+    function calculateWeeklyPlan() {
+      const brandTotals = {
+        crystal: { planTon: 0, producedTon: 0 },
+        liga: { planTon: 0, producedTon: 0 },
+        saah: { planTon: 0, producedTon: 0 }
+      };
+
+      weeklyItems.forEach(it => {
+        if (!it.active) return;
+        brandTotals[it.brand].planTon += (it.plan * it.kgPerCarton) / 1000;
+        brandTotals[it.brand].producedTon += (it.produced * it.kgPerCarton) / 1000;
+      });
+
+      let grandPlan = 0, grandProduced = 0;
+      const summaryContainer = document.getElementById('week-brand-summary-container');
+      let summaryHtml = '';
+
+      ['crystal', 'liga', 'saah'].forEach(brandKey => {
+        const t = brandTotals[brandKey];
+        const remainTon = Math.max(0, t.planTon - t.producedTon);
+        const pct = t.planTon > 0 ? Math.min(100, (t.producedTon / t.planTon) * 100) : 0;
+        grandPlan += t.planTon;
+        grandProduced += t.producedTon;
+        const meta = BRANDS[brandKey];
+
+        summaryHtml += `
+          <div class="glass-card p-4 border-r-4 shadow-sm" style="border-right-color: ${meta.color};">
+            <div class="flex justify-between items-center mb-2">
+              <span class="badge-perf bg-slate-100">${meta.emoji} ${meta.name}</span>
+              <span class="text-lg font-black" style="color:${meta.color};">${pct.toFixed(0)}%</span>
+            </div>
+            <div class="grid grid-cols-3 gap-2 text-center text-xs font-bold">
+              <div><div class="text-slate-400">الخطة</div><div class="text-base font-black text-slate-800">${t.planTon.toFixed(2)}</div></div>
+              <div><div class="text-slate-400">المنتج</div><div class="text-base font-black text-emerald-600">${t.producedTon.toFixed(2)}</div></div>
+              <div><div class="text-slate-400">المتبقي</div><div class="text-base font-black text-rose-600">${remainTon.toFixed(2)}</div></div>
+            </div>
+          </div>
+        `;
+      });
+
+      summaryContainer.innerHTML = summaryHtml;
+      const grandRemain = Math.max(0, grandPlan - grandProduced);
+      const grandPct = grandPlan > 0 ? Math.min(100, (grandProduced / grandPlan) * 100) : 0;
+
+      document.getElementById('week-total-plan').innerHTML = `${grandPlan.toFixed(2)} <span class="text-sm">طن</span>`;
+      document.getElementById('week-total-produced').innerHTML = `${grandProduced.toFixed(2)} <span class="text-sm">طن</span>`;
+      document.getElementById('week-total-remaining').innerHTML = `${grandRemain.toFixed(2)} <span class="text-sm">طن</span>`;
+      document.getElementById('week-total-pct').innerText = `${grandPct.toFixed(0)}%`;
+    }
+
+
+    // ===== بحث كود الموظف — بيانات مدمجة داخل HTML ولا تحتاج أي ملفات خارجية =====
+    const EMPLOYEE_LOOKUP_STORAGE_KEY = 'NSD_EMPLOYEE_LOOKUP_DATA_V4';
+    const EMPLOYEES_EMBEDDED = [
+{"code":"3340","name":"برهان الدين محمد حامد احمد الشميري","dept":"انتاج وتحضير المنظفات","job":"مشرف انتاج","residence":"حذران","plant":"مصنع إنتاج وتحضير البودرة"},
+{"code":"8664","name":"عبدالقادر صالح محمد سعيد","dept":"انتاج وتحضير المنظفات","job":"فني انتاج","residence":"الحصب","plant":"مصنع إنتاج وتحضير البودرة"},
+{"code":"8693","name":"محمد حمود احمد","dept":"إنتاج وتحضير المنظفات","job":"فني إنتاج","residence":"غير محدد","plant":"مصنع إنتاج وتحضير البودرة"},
+{"code":"8695","name":"عبده نصر فارع","dept":"إنتاج وتحضير المنظفات","job":"فني إنتاج","residence":"غير محدد","plant":"مصنع إنتاج وتحضير البودرة"},
+{"code":"8714","name":"سلطان قاسم سرحان عثمان","dept":"انتاج وتحضير المنظفات","job":"فني تشغيل","residence":"غير محدد","plant":"مصنع إنتاج وتحضير البودرة"},
+{"code":"8722","name":"عبدالكريم احمد عبده شرف","dept":"انتاج وتحضير المنظفات","job":"فني انتاج","residence":"صينة","plant":"مصنع إنتاج وتحضير البودرة"},
+{"code":"8732","name":"محمد سالم ناجي صالح","dept":"انتاج وتحضير المنظفات","job":"اخصائي انتاج","residence":"الحوبان","plant":"مصنع إنتاج وتحضير البودرة"},
+{"code":"8775","name":"جعفر علي سليم بشر","dept":"انتاج وتحضير المنظفات","job":"اخصائي انتاج","residence":"غير محدد","plant":"مصنع إنتاج وتحضير البودرة"},
+{"code":"8798","name":"ياسين عبدالواسع محمد مقبل","dept":"انتاج وتحضير المنظفات","job":"فني تشغيل","residence":"القبه","plant":"مصنع إنتاج وتحضير البودرة"},
+{"code":"8834","name":"وليد عبدالله سعيد سعيد","dept":"انتاج وتحضير المنظفات","job":"مشرف انتاج","residence":"صنعاء","plant":"مصنع إنتاج وتحضير البودرة"},
+{"code":"8879","name":"احمد خالد احمد عوض","dept":"تعبئه البودره","job":"عامل انتاج","residence":"غير محدد","plant":"مصنع إنتاج وتحضير البودرة"},
+{"code":"8886","name":"ياسين محمد احمد الحيسي","dept":"انتاج وتحضير المنظفات","job":"مشغل انتاج","residence":"حذران","plant":"مصنع إنتاج وتحضير البودرة"},
+{"code":"8887","name":"هاشم علي عبدالله علي","dept":"انتاج وتحضير المنظفات","job":"مشغل انتاج","residence":"حذران","plant":"مصنع إنتاج وتحضير البودرة"},
+{"code":"8889","name":"فرحان صالح علي محمد","dept":"انتاج وتحضير المنظفات","job":"مشغل انتاج","residence":"حذران","plant":"مصنع إنتاج وتحضير البودرة"},
+{"code":"8904","name":"سعيد احمد سيف خالد","dept":"انتاج وتحضير المنظفات","job":"اخصائي انتاج","residence":"الحصب","plant":"مصنع إنتاج وتحضير البودرة"},
+{"code":"8919","name":"فؤاد شرف سعيد علي","dept":"انتاج وتحضير المنظفات","job":"مشغل انتاج","residence":"الحوبان","plant":"مصنع إنتاج وتحضير البودرة"},
+{"code":"8942","name":"جلال عبده سيف محمد","dept":"انتاج وتحضير المنظفات","job":"اخصائي انتاج","residence":"بيرباش","plant":"مصنع إنتاج وتحضير البودرة"},
+{"code":"8957","name":"هاني علي قاسم محمد","dept":"انتاج وتحضير المنظفات","job":"مشرف انتاج","residence":"الثوره","plant":"مصنع إنتاج وتحضير البودرة"},
+{"code":"8959","name":"محمد سعيد عبدالمغني السيفي","dept":"انتاج وتحضير المنظفات","job":"اخصائي انتاج","residence":"صينة","plant":"مصنع إنتاج وتحضير البودرة"},
+{"code":"8990","name":"جمال عبد الجليل محمد","dept":"انتاج وتحضير المنظفات","job":"اخصائي انتاج","residence":"الثوره","plant":"مصنع إنتاج وتحضير البودرة"},
+{"code":"9001","name":"عبد العليم سعيد عثمان","dept":"إنتاج وتحضير المنظفات","job":"فني إنتاج","residence":"غير محدد","plant":"مصنع إنتاج وتحضير البودرة"},
+{"code":"9009","name":"محمد نعمان عبده احمد","dept":"انتاج وتحضير المنظفات","job":"فني انتاج","residence":"الاذمور","plant":"مصنع إنتاج وتحضير البودرة"},
+{"code":"9010","name":"عرفات هزاع فرحان الجعفري","dept":"انتاج وتحضير المنظفات","job":"عامل انتاج","residence":"الاذمور","plant":"مصنع إنتاج وتحضير البودرة"},
+{"code":"9011","name":"رفيق محمد غالب المقطري","dept":"انتاج وتحضير المنظفات","job":"اخصائي انتاج","residence":"وادي القاضي","plant":"مصنع إنتاج وتحضير البودرة"},
+{"code":"9012","name":"مشير سعيد بن سعيد","dept":"إنتاج وتحضير المنظفات","job":"فني إنتاج","residence":"غير محدد","plant":"مصنع إنتاج وتحضير البودرة"},
+{"code":"9047","name":"احمد علي احمد صالح","dept":"انتاج وتحضير المنظفات","job":"مشغل انتاج","residence":"حذران","plant":"مصنع إنتاج وتحضير البودرة"},
+{"code":"9131","name":"محي الدين عبدالله ابراهيم ابراهيم يوسف","dept":"انتاج وتحضير المنظفات","job":"اخصائي انتاج","residence":"الحوبان","plant":"مصنع إنتاج وتحضير البودرة"},
+{"code":"9183","name":"صديق اقبال صديق اسماعيل","dept":"انتاج وتحضير المنظفات","job":"اخصائي انتاج","residence":"المطار القديم","plant":"مصنع إنتاج وتحضير البودرة"},
+{"code":"9185","name":"احمد علي سيف محمد","dept":"انتاج وتحضير المنظفات","job":"عامل انتاج","residence":"حذران","plant":"مصنع إنتاج وتحضير البودرة"},
+{"code":"9221","name":"رفيق عبدالسلام قاسم احمد","dept":"انتاج وتحضير المنظفات","job":"مشغل انتاج","residence":"الدعيسه","plant":"مصنع إنتاج وتحضير البودرة"},
+{"code":"9225","name":"سيف عبدالله منصر يوسف","dept":"انتاج وتحضير المنظفات","job":"عامل انتاج","residence":"الرمده","plant":"مصنع إنتاج وتحضير البودرة"},
+{"code":"9279","name":"بسام حسان عبدالله سعيد","dept":"انتاج وتحضير المنظفات","job":"مشغل انتاج","residence":"الطيار","plant":"مصنع إنتاج وتحضير البودرة"},
+{"code":"9282","name":"عبده احمد سيف الخضيري","dept":"إنتاج وتحضير المنظفات","job":"فني إنتاج","residence":"غير محدد","plant":"مصنع إنتاج وتحضير البودرة"},
+{"code":"9303","name":"نجيب ناجي علي احمد","dept":"انتاج وتحضير المنظفات","job":"عامل انتاج","residence":"حذران","plant":"مصنع إنتاج وتحضير البودرة"},
+{"code":"9397","name":"شرف ثابت مهيوب احمد","dept":"انتاج وتحضير المنظفات","job":"عامل انتاج","residence":"حذران","plant":"مصنع إنتاج وتحضير البودرة"},
+{"code":"9401","name":"اسامه محمد سرحان امير","dept":"انتاج وتحضير المنظفات","job":"عامل انتاج","residence":"حذران","plant":"مصنع إنتاج وتحضير البودرة"},
+{"code":"9419","name":"حامد غالب سيف احمد","dept":"انتاج وتحضير المنظفات","job":"عامل انتاج","residence":"الاذمور","plant":"مصنع إنتاج وتحضير البودرة"},
+{"code":"9458","name":"محمد احمد حسان احمد الحيسي","dept":"انتاج وتحضير المنظفات","job":"عامل انتاج","residence":"الربيعي","plant":"مصنع إنتاج وتحضير البودرة"},
+{"code":"9469","name":"هائل سعيد حسان احمد","dept":"انتاج وتحضير المنظفات","job":"عامل انتاج","residence":"الدعيسه","plant":"مصنع إنتاج وتحضير البودرة"},
+{"code":"9514","name":"محمد رسام مهيوب محمد","dept":"انتاج وتحضير المنظفات","job":"مشغل انتاج","residence":"المطار القديم","plant":"مصنع إنتاج وتحضير البودرة"},
+{"code":"9525","name":"طه حسين صدام البحر","dept":"انتاج وتحضير المنظفات","job":"مشغل انتاج","residence":"الاذمور","plant":"مصنع إنتاج وتحضير البودرة"},
+{"code":"9553","name":"هاني احمد سلطان قاسم","dept":"انتاج وتحضير المنظفات","job":"مشغل انتاج","residence":"الربيعي","plant":"مصنع إنتاج وتحضير البودرة"},
+{"code":"9628","name":"رضوان عبدالمجيد عبدالصغير احمد","dept":"انتاج وتحضير المنظفات","job":"مشغل انتاج","residence":"حذران","plant":"مصنع إنتاج وتحضير البودرة"},
+{"code":"9685","name":"عبدالله محمد ابراهيم حسان","dept":"انتاج وتحضير المنظفات","job":"مشرف انتاج","residence":"بير باشه","plant":"مصنع إنتاج وتحضير البودرة"},
+{"code":"9700","name":"امجد عادل ناجي حسن","dept":"انتاج وتحضير المنظفات","job":"عامل انتاج","residence":"الاذمور","plant":"مصنع إنتاج وتحضير البودرة"},
+{"code":"9704","name":"محمود سلطان علي احمد","dept":"انتاج وتحضير المنظفات","job":"عامل انتاج","residence":"حذران","plant":"مصنع إنتاج وتحضير البودرة"},
+{"code":"9710","name":"نجلي عبدالله عبده سرحان","dept":"انتاج وتحضير المنظفات","job":"عامل انتاج","residence":"الربيعي","plant":"مصنع إنتاج وتحضير البودرة"},
+{"code":"17596","name":"محمد فرحان محمد غالب","dept":"تعبئه البودره","job":"عامل انتاج","residence":"غير محدد","plant":"مصنع إنتاج وتحضير البودرة"},
+{"code":"17942","name":"عبدالحكيم علي عبدالله احمد عثمان","dept":"انتاج وتحضير المنظفات","job":"عامل انتاج","residence":"حذران","plant":"مصنع إنتاج وتحضير البودرة"},
+{"code":"19945","name":"مرشد مراد مرشد على الشقيرى","dept":"انتاج وتحضير المنظفات","job":"مهندس انتاج","residence":"الحوبان","plant":"مصنع إنتاج وتحضير البودرة"}
+];
+
+    let employeeLookupData = EMPLOYEES_EMBEDDED;
+    const elEsc = v => String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    function elNorm(value) { return String(value ?? '').toLowerCase().replace(/[٠-٩]/g,d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d)).replace(/[۰-۹]/g,d=>'۰۱۲۳۴۵۶۷۸۹'.indexOf(d)).replace(/[ً-ٰٟ]/g,'').replace(/ـ+/g,'').replace(/[أإآٱ]/g,'ا').replace(/[ةه]/g,'ه').replace(/[يىئ]/g,'ي').replace(/ؤ/g,'و').replace(/[^a-z0-9ء-ي]+/g,' ').trim().replace(/\s+/g,' '); }
+    function elField(label,val){return val?`<div class="employee-field"><span class="employee-field-label">${label}</span><span class="employee-field-value">${elEsc(val)}</span></div>`:'';}
+    // محرك بحث ذكي: تطابق مباشر + بداية النص + احتواء + تصحيح الأخطاء الإملائية
+    function elLevenshtein(a,b){a=String(a||'');b=String(b||'');if(a===b)return 0;if(!a)return b.length;if(!b)return a.length;let p=Array.from({length:b.length+1},(_,i)=>i);for(let i=1;i<=a.length;i++){let c=[i];for(let j=1;j<=b.length;j++)c[j]=Math.min(c[j-1]+1,p[j]+1,p[j-1]+(a[i-1]===b[j-1]?0:1));p=c;}return p[b.length];}
+    function elSimilarity(a,b){a=String(a||'');b=String(b||'');if(!a||!b)return 0;if(a===b)return 1;if(a.includes(b)||b.includes(a))return .92;const d=elLevenshtein(a,b),m=Math.max(a.length,b.length);return m?Math.max(0,1-d/m):0;}
+    function elScore(q,qn,qc,isNum,e){
+      const code=String(e.id_str||e.code||''), name=e.c_name||elNorm(e.name).replace(/ /g,''), house=e.c_house||elNorm(e.residence||e.housing).replace(/ /g,''), job=elNorm(e.job||e.job_title).replace(/ /g,'');
+      if(!qn)return 1; let best=0;
+      if(isNum){if(code===qn)best=1000;else if(code.startsWith(qn))best=850;else if(code.includes(qn))best=650;else{const d=elLevenshtein(qn,code);if(d<=Math.max(1,Math.floor(qn.length/3)))best=480-d*40;}}
+      else{const compact=qn.replace(/ /g,'');[name,house,job].filter(Boolean).forEach(f=>{if(f===compact)best=Math.max(best,1000);else if(f.startsWith(compact))best=Math.max(best,900);else if(f.includes(compact))best=Math.max(best,760);else best=Math.max(best,Math.round(elSimilarity(f,compact)*600));});
+        const toks=qn.split(' ').filter(Boolean), nts=elNorm(e.name).split(' ').filter(Boolean);
+        toks.forEach(t=>{let tb=0;nts.forEach(nt=>tb=Math.max(tb,elSimilarity(nt,t)));if(tb>=.55)best=Math.max(best,520+Math.round(tb*280));});}
+      return best+(e.is_priority?5000:0);
+    }
+    function employeeSearchSuggestions(raw){
+      const box=document.getElementById('employee-live-suggestions');if(!box)return;const q=elNorm(raw).replace(/ /g,'');
+      if(!q){box.innerHTML='<span class="text-[11px] font-bold text-slate-400">اكتب حرفاً أو رقماً لعرض اقتراحات فورية</span>';return;}
+      const isNum=/^\d+$/.test(q), ranked=employeeLookupData.map(e=>({e,s:elScore(q,q,q,isNum,e)})).filter(x=>x.s>0).sort((a,b)=>b.s-a.s).slice(0,8);
+      if(!ranked.length){box.innerHTML='<span class="text-[11px] font-bold text-slate-400">لا توجد اقتراحات بهذا الجزء — جرّب حرفاً آخر</span>';return;}
+      box.innerHTML=ranked.map(({e})=>`<button type="button" class="employee-suggestion" data-code="${elEsc(e.code||e.id_str||'')}">${elEsc(e.name)} <b>(${elEsc(e.code||e.id_str)})</b></button>`).join('');
+      box.querySelectorAll('.employee-suggestion').forEach(btn=>btn.addEventListener('click',()=>employeeChooseSuggestion(btn.dataset.code)));
+    }
+    function employeeChooseSuggestion(code){const e=employeeLookupData.find(x=>String(x.code||x.id_str)===String(code));if(!e)return;document.getElementById('employee-search-input').value=e.name;employeeLookupRender();openEmployeeModal(e);}
+    function openEmployeeModal(e){if(!e)return;document.getElementById('employee-modal-name').textContent=e.name||'اسم غير متوفر';document.getElementById('employee-modal-code').textContent=e.id_str||e.code||'—';document.getElementById('employee-modal-job').textContent=e.job_title||e.job||'غير محدد';document.getElementById('employee-modal-housing').textContent=e.housing||e.residence||'غير محدد';document.getElementById('employee-modal-dept').textContent=e.department||e.dept||'غير محدد';document.getElementById('employee-modal-schedule').textContent=e.schedule_desc||'غير محدد';document.getElementById('employee-modal-shift').textContent=e.shift_tag||'غير محدد';document.getElementById('employee-modal-plant').textContent=e.org_unit||e.plant||'مصنع إنتاج وتحضير البودرة';window.currentEmployeeModal=e;document.getElementById('employee-detail-modal').classList.add('active');document.body.style.overflow='hidden';}
+    function closeEmployeeModal(){document.getElementById('employee-detail-modal').classList.remove('active');document.body.style.overflow='';}
+    function closeEmployeeModalOnOverlay(ev){if(ev.target.id==='employee-detail-modal')closeEmployeeModal();}
+    function copyEmployeeModalCode(){if(window.currentEmployeeModal)copyEmployeeText(window.currentEmployeeModal.id_str||window.currentEmployeeModal.code||'','كود الموظف');}
+    function copyEmployeeModalData(){const e=window.currentEmployeeModal;if(!e)return;copyEmployeeText(`بيانات الموظف:\nالاسم: ${e.name||''}\nكود الموظف: ${e.id_str||e.code||''}\nالمسمى الوظيفي: ${e.job_title||e.job||''}\nالقسم: ${e.department||e.dept||''}\nالسكن: ${e.housing||e.residence||''}\nالمصنع: ${e.plant||e.org_unit||''}`,'كامل بيانات الموظف');}
+    function copyEmployeeText(text,label){const done=()=>{const old=document.getElementById('save-status-indicator');if(old){const t=old.querySelector('span:last-child');const prev=t?.textContent;if(t)t.textContent='تم النسخ بنجاح';old.classList.remove('opacity-0');old.classList.add('opacity-100');setTimeout(()=>{if(t)t.textContent=prev||'تم الحفظ محلياً';old.classList.remove('opacity-100');old.classList.add('opacity-0')},1600)}};if(navigator.clipboard&&window.isSecureContext)navigator.clipboard.writeText(text).then(done).catch(()=>fallback());else fallback();function fallback(){const ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();done();}}
+    function employeeLookupRender(){
+      const input=document.getElementById('employee-search-input'),raw=input?input.value.trim():'',results=document.getElementById('employee-search-results'),clear=document.getElementById('employee-search-clear');
+      document.getElementById('employee-search-count').textContent=employeeLookupData.length.toLocaleString('ar');if(clear)clear.style.display=raw?'block':'none';employeeSearchSuggestions(raw);
+      if(!employeeLookupData.length){results.innerHTML='<div class="glass-card p-6 text-center text-sm font-bold text-amber-800 bg-amber-50">لا توجد بيانات موظفين.</div>';return;}
+      if(!raw){results.innerHTML='<div class="glass-card p-6 text-center text-sm font-bold text-slate-500">ابدأ بكتابة أي حرف أو رقم وستظهر النتائج فوراً.</div>';return;}
+      const qn=elNorm(raw),qc=qn.replace(/ /g,''),isNum=/^[0-9]+$/.test(qn);
+      const all=employeeLookupData.map(e=>({e,s:elScore(qn,qn,qc,isNum,e)})).filter(x=>x.s>=430).sort((a,b)=>b.s-a.s);
+      if(!all.length){results.innerHTML='<div class="glass-card p-6 text-center text-sm font-bold text-slate-500">لم أجد تطابقاً واضحاً. جرّب حرفاً من الاسم أو جزءاً من الرقم.</div>';return;}
+      const shown=all.slice(0,50);results.innerHTML=`<div class="text-xs font-black text-slate-500 px-1">${all.length.toLocaleString('ar')} نتيجة${all.length>50?' (تُعرض أول 50)':''}</div>`+shown.map(({e,s})=>{const idx=employeeLookupData.indexOf(e);return `<article class="employee-search-result" onclick="openEmployeeModal(employeeLookupData[${idx}])"><div class="flex flex-wrap justify-between items-center gap-2"><div><h2 class="font-black text-slate-800 text-base md:text-lg">${elEsc(e.name)||'اسم غير متوفر'}</h2><div class="text-[11px] text-slate-400 font-bold mt-1">💼 ${elEsc(e.job||e.job_title||'غير محدد')} • 📍 ${elEsc(e.residence||e.housing||'غير محدد')}</div></div><div class="flex items-center gap-2"><span class="employee-match-score">✓ ${s>=850?'مطابقة قوية':'تطابق قريب'}</span><span class="employee-code-pill">SAP: ${elEsc(e.code||e.id_str)||'—'}</span></div></div><div class="employee-result-grid">${elField('🏢 القسم',e.dept||e.department)}${elField('📍 السكن',e.residence||e.housing)}${elField('💼 الوظيفة',e.job||e.job_title)}</div></article>`;}).join('');
+    }
+    function employeeLookupSetData(data){employeeLookupData=data;employeeLookupData.forEach(e=>{e.id_str=String(e.code??e.id??'').trim().replace(/\.0+$/,'');e.c_name=elNorm(e.name).replace(/ /g,'');e.c_house=elNorm(e.residence??e.housing).replace(/ /g,'');});document.getElementById('employee-data-note').textContent=`جاهز للبحث في ${employeeLookupData.length.toLocaleString('ar')} موظفاً — البيانات مدمجة داخل ملف النظام`;employeeLookupRender();}
+    function initEmployeeLookup(){
+      employeeLookupSetData(EMPLOYEES_EMBEDDED);
+      const input=document.getElementById('employee-search-input');
+      if(input){input.addEventListener('input',employeeLookupRender);input.addEventListener('search',employeeLookupRender);}
+      const clear=document.getElementById('employee-search-clear');
+      if(clear)clear.addEventListener('click',()=>{input.value='';employeeLookupRender();input.focus();});
+    }
+
+    window.addEventListener('keydown', e => { if (e.key === 'Escape') closeEmployeeModal(); });
+
+    // ---------------------------------------------------------
+    // 10. التشغيل الأولي وتفعيل الأحداث
+    // ---------------------------------------------------------
+    window.onload = function() {
+      loadSavedState();
+      attachGlobalAutoSelect();
+      renderPackagingLines();
+      renderSilos();
+      calculateAll();
+      renderWeekTabs();
+      renderWeekItems();
+      calculateWeeklyPlan();
+      renderPerfumeCatUI();
+      initEmployeeLookup();
+    };
+  </script>
+</body>
+</html>
